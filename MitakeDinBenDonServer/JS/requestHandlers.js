@@ -1,12 +1,3 @@
-function start() {
-    console.log("Request handler 'start' was called.");
-    return "Hello start";
-}
+var login = require('./api/Login.js');
 
-function upload() {
-  console.log("Request handler 'upload' was called.");
-  return "Hello upload";
-}
-
-exports.start = start;
-exports.upload = upload;
+exports.Login = login.login;
