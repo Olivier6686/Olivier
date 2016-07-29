@@ -9,14 +9,14 @@ function login(data) {
     var  querys    = data.query;
     var args = querystring.parse(querys);    
 
-
+/*
     if (request.method === "GET") {
         response.writeHead(404, {"Content-Type": "text/plain"});
         response.write("404 Not Found\n");
         response.end();
         return;
     }
-
+*/
     console.log("Request handler 'login' was called.");
     console.log("query=" + querys);
 
@@ -26,21 +26,21 @@ function login(data) {
         return;
     }
      
-    var request = new sql.Request(connection);
+    var sqlRequest = new sql.Request(connection);
         
     var query = 'select * from Account where UserName=\'' + args.UserName +'\'';
     // or request.execute(procedure);
-    request.query(query, function(err, recordset) {
+    sqlRequest.query(query).then(function(recordset) {
     // ... error checks
         if ( recordset.length === 0) {
             common.ReturnError(common.ErrorMap[2], response);
             return;
         }
-        if (err !== null && err !== "" ) {
+        /*if (err !== null && err !== "" && recordset.length === 0) {
             console.dir(err);
             common.ReturnError(err, response);
             return;
-        }
+        }*/
 
         console.dir(recordset);
         
@@ -60,6 +60,10 @@ function login(data) {
         else
             common.ReturnError(common.ErrorMap[2], response);
         
-    });
+    }).catch(function(err) {
+	    console.dir(err);
+        common.ReturnError(err, response);
+        return;
+	});
 }
 exports.login = login;

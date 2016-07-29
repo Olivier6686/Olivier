@@ -9,6 +9,7 @@ function start(route, handle) {
         var pathname = url.parse(request.url).pathname;
         var query   =url.parse(request.url).query;
         var json = querystring.parse(query);
+        
         var data = {};
         data.request = request;
         data.handle = handle;

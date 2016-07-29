@@ -18,48 +18,37 @@ function getStoresByName(data) {
     }
 
     console.log("Request handler '/getStoresByName' was called.");
-    console.log("query=" + querys);
+    
 
 
-    if (typeof(args.UserName) === 'undefined' || typeof(args.Password) === 'undefined') {
+    if (typeof(args.Name) === 'undefined') {
         common.ReturnError(common.ErrorMap[1], response);
         return;
     }
      
-    var request = new sql.Request(connection);
-        
-    var query = 'select * from Account where UserName=\'' + args.UserName +'\'';
+    var sqlRequest = new sql.Request(connection);
+
+    var query = 'select * from Store where StoreName LIKE \'%' + args.Name +'%\'';
+    console.log("query=" + querys);
     // or request.execute(procedure);
-    request.query(query, function(err, recordset) {
+    sqlRequest.query(query).then(function(recordset) {
     // ... error checks
-        if ( recordset.length === 0) {
+        if (recordset.length === 0) {
             common.ReturnError(common.ErrorMap[2], response);
-            return;
-        }
-        if (err !== null && err !== "" ) {
-            console.dir(err);
-            common.ReturnError(err, response);
             return;
         }
 
-        console.dir(recordset);
+        console.dir(recordset);            
+        response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin':'*'});
+        var result = {'IsSucceed':true,'Stores':recordset};
         
-        if (recordset[0]) {
-            var record = recordset[0];
-            if (args.Password === record.Password) {
-                response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin':'*'});
-                record.IsSucceed = true;
-                var r = JSON.stringify(record); 
-                response.write(r);        
-                response.end();
-            }
-            else {
-                common.ReturnError(common.ErrorMap[0], response);
-            }
-        }
-        else
-            common.ReturnError(common.ErrorMap[2], response);
-        
-    });
+        var r = JSON.stringify(result); 
+        response.write(r);        
+        response.end();
+     }).catch(function(err) {
+	    console.dir(err);
+        common.ReturnError(err, response);
+        return;
+	});
 }
-exports.login = login;
+exports.GetStoresByName = getStoresByName;
