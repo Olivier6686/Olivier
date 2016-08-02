@@ -1,20 +1,10 @@
-var passwordError = {'name':'PasswordError', 'message':'Password is wrong.', 'code':'0'};
-var parameterInputError = {'name':'parameterInputError', 'message':'parameter is error.', 'code':'1'};
-var NotFoundDataError = {'name':'NotFoundDataError', 'message':'Data not found.', 'code':'2'};
-
-var ErrorMap = [passwordError, parameterInputError, NotFoundDataError];
-
-function ReturnError(err, response) {
-    var error = {"IsSucceed":false};
-    error.exception = err;
-    response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin':'*'});
-    response.write(JSON.stringify(error));           
-    response.end(); 
-}
+var sql = require('mssql');
+var common = require('../Common/common.js');
+var connection = require('../Common/connection.js')
 
 function getAccount(data, callback)
 {
-    var username = data.username;
+    var username = data.Username;
     var  response = data.response;
 
     var sqlRequest = new sql.Request(connection);
@@ -46,6 +36,4 @@ function getAccount(data, callback)
 	});
 }
 
-
-exports.ReturnError = ReturnError;
-exports.ErrorMap = ErrorMap;
+exports.getAccount = getAccount;
