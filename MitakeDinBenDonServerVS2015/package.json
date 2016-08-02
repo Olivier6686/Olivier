@@ -1,0 +1,14 @@
+{
+  "name": "mitake-din-ben-don-server-vs2015",
+  "version": "0.0.0",
+  "description": "MitakeDinBenDonServerVS2015",
+  "main": ".\\js\\app.js",
+  "author": {
+    "name": "olivier"
+  },
+  "dependencies": {
+    "lodash": "^4.14.0",
+    "mssql": "^3.3.0",
+    "node-uuid": "^1.4.7"
+  }
+}
