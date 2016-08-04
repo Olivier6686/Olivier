@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="CSS/CommonStyle.css">
+    <link rel="stylesheet" href="CSS/indexStyle.css">
+    <link rel="icon" href="Images/icon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="JS/Common.js"></script>
+    <script src="JS/indexJS.js"></script>
+    <meta charset="utf-8" />
+    <title>Tasty</title>
+</head>
+<body>
+    <div id="home" class="bgimg_1 bgimg">
+        <ul class="topnav">
+            <li><a href="#logIn">Log In</a></li>
+            <li><a href="#howToUs">How To Use?</a></li>
+            <li><a href="#futures">Futures</a></li>
+            <li><a href="#home">Home</a></li>
+        </ul>
+
+        <div class="caption">
+            <span class="border">Welcom To Tasty</span>
+        </div>
+    </div>
+
+    <div id="futures" class="descriptionDiv">
+        <h3>Help You To Order Drinks and Meals</h3>
+        <p>This Tasty platform help you to order dishes easier and quickly.</p>
+        <p>You can select some drink stores, meal stores or dessert stores.</p>
+        <p>And also, pick the store in the map to help you realize what stores near you.</p>
+        <p>You can share the order to anyone who whan to order. And summary the order more easier and quickly.</p>
+    </div>
+
+    <div id="howToUs" class="bgimg_2 bgimg">
+        <div class="caption">
+            <span class="border" style="background-color:transparent;color:#171717;">How To Use?</span>
+        </div>
+    </div>
+
+    <div class="descriptionDiv">
+        <h3>Tutorial</h3>
+        <p>First, Login or sign up</p>
+        <p>Second, Select some stores which you want to order</p>
+        <p>Third, Share and order it</p>
+        <p>Final, Enjoy it, and have a good time!</p>
+    </div>
+
+    <div id="logIn" class="bgimg_3 bgimg">
+        <div class="caption">
+            <span class="border" style="background-color:transparent;color:#171717;">Login</span>
+        </div>
+    </div>
+
+    <div class="container" style="width:30%;margin:0 auto">
+        <span><b>Username</b></span>
+        <input class="input" id="username" type="text" placeholder="Enter User name" name="username"/>
+
+        <span><b>Password</b></span>
+        <input class="input" id="psw" type="password" placeholder="Enter Password" name="psw"/>
+
+        <div>
+            <button type="button" onclick="sendLoginPost()" style="background-color:#90EE90;">Login</button>
+            <button type="button" style="background-color:#FFA07A;float:right;" onclick="onCancelClick()">Cancel</button>
+        </div>
+
+        <div style="text-align:right">
+            <span style="width:auto;">or <a href="HTML/SignupPage.html">Signup</a></span>
+        </div>
+
+        <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
+    </div>   
+
+    <footer style="background-color:#999999;opacity:0.7;">
+        <p style="text-align:center;color:white;padding:14px;">Powered by Mitake RD3</p>
+    </footer>
+
+</body>
+</html>

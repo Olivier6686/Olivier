@@ -1,0 +1,59 @@
+﻿.bgimg_1 {
+    background-image: url("../Images/bgimg_1.jpg");
+    min-height: 100%;
+}
+
+.bgimg_2 {
+    background-image: url("../Images/bgimg_2.jpg");
+    min-height: 400px;
+}
+
+.bgimg_3 {
+    background-image: url("../Images/bgimg_3.jpg");
+    min-height: 400px;
+}
+
+.bgimg_4 {
+    background-image: url("../Images/bgimg_4.jpg");
+    min-height: 400px;
+}
+
+.container {
+    padding: 16px;
+}
+
+button {
+    color: #777777;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #999999;
+    opacity: 0.7;
+}
+
+ul.topnav li {
+    float: right;
+}
+
+ul.topnav li a {
+    display: inline-block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+ul.topnav li a:hover {
+    color: #333333;
+}

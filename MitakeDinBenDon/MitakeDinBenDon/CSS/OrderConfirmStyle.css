@@ -1,0 +1,14 @@
+﻿.bgimg_9 {
+    background-image: url("../Images/bgimg_9.jpg");
+    min-height: 400px;
+}
+
+.bgimg_10 {
+    background-image: url("../Images/bgimg_10.jpg");
+    min-height: 400px;
+}
+
+input.copyImage {
+    transition: 0.1s ease-in-out;
+    opacity: 0;
+}

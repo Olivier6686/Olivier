@@ -1,0 +1,10 @@
+{
+  "name": "mitake-din-ben-don",
+  "version": "0.0.0",
+  "description": "MitakeDinBenDon",
+  "main": "server.js",
+  "author": {
+    "name": "olivier",
+    "email": ""
+  }
+}

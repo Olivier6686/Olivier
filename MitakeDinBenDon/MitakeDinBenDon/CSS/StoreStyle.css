@@ -1,0 +1,24 @@
+﻿.bgimg_7 {
+    background-image: url("../Images/bgimg_7.jpg");
+    min-height: 400px;
+}
+
+.bgimg_8 {
+    background-image: url("../Images/bgimg_8.jpg");
+    min-height: 400px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 70%;
+    margin: 0 auto;
+}
+
+button {
+    color: #777777;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+}

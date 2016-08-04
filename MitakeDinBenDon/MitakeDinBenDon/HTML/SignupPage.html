@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="../CSS/CommonStyle.css">
+    <link rel="stylesheet" href="../CSS/indexStyle.css">
+    <link rel="icon" href="../Images/icon.png">
+    <script src="../JS/SignupJS.js"></script>
+    <meta charset="utf-8" />
+    <title>Tasty</title>
+</head>
+<body onload="generateRandomNumbers()">
+    <div class="bgimg_4 bgimg">
+        <div class="caption">
+            <span class="border">Sign Up</span>
+        </div>
+    </div>
+
+    <div class="container" style="width:30%;margin:0 auto">
+
+        <span><b>Real Name</b></span>
+        <input class="input" type="text" placeholder="Enter Real Name" name="realname" required />
+
+        <span><b>Username</b></span>
+        <input class="input" type="text" placeholder="Enter Username" name="username" required />
+
+        <span><b>Password</b></span>
+        <input class="input" type="password" placeholder="Enter Password" name="psw" required />
+
+        <span><b>Enter Password Again</b></span>
+        <input class="input" type="password" placeholder="Enter Password Again" name="re_psw" required />
+
+        <span><b>Answer it: </b></span>
+        <span id="num1"></span> <span> + </span> <span id="num2"></span> <span> = </span>
+        <input class="input" type="number" name="sum" placeholder="Enter number" required />
+
+        <div>
+            <button type="submit" style="background-color:#90EE90;">Ok</button>
+            <button type="button" onclick="onCancelClick()" style="background-color:#FFA07A;float:right;">Cancel</button>
+        </div>
+    </div>
+
+</body>
+</html>

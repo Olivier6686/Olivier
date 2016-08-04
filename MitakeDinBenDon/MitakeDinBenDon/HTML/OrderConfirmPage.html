@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="../CSS/CommonStyle.css">
+    <link rel="stylesheet" href="../CSS/StoreStyle.css">
+    <link rel="stylesheet" href="../CSS/OrderConfirmStyle.css">
+    <link rel="icon" href="../Images/icon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../JS/OrderConfirmJS.js"></script>
+    <script src="../JS/Common.js"></script>
+    <meta charset="utf-8" />
+    <title>Tasty</title>
+</head>
+<body onload="queryStoreInfo()">
+    <div class="bgimg_9 bgimg">
+        <div class="caption">
+            <span id="titleSpan" class="border"></span>
+        </div>
+    </div>
+
+    <div class="descriptionDiv">
+        <table id="informationTable"></table>
+    </div>
+
+    <div class="bgimg_10 bgimg">
+        <div class="caption">
+            <span class="border" style="background-color:transparent;color:#171717;">Statistics</span>
+        </div>
+    </div>
+
+    <div class="descriptionDiv">
+        <table style="width:40%">
+            <tr>
+                <td>Description</td>
+                <td><span id="descriptionSpan" style="width:70%;" /></td>
+            </tr>
+            <tr>
+                <td>Expired Time</td>
+                <td><span id="expiredTimeSpan" style="width:70%;" /></td>
+            </tr>
+        </table>
+        <br>
+
+        <table id="productTable"></table>
+
+        <div id="emptyDiv" class="descriptionDiv container" style="width:40%;margin:0 auto;">
+            <h3 id="emptyMsg" style="margin:0 auto;text-align:center;color:#f7786b">You have no order now, you can click the button to order!</h3>
+            <button type="button" onclick="onOrderClick()" style="background-color:#90EE90;width:45%;font-size:16px">Order Now</button>
+        </div>
+
+        <div id="attendanceDiv" class="descriptionDiv" style="width:40%;margin:0 auto;display:none">
+            <form id="menuForm" action="OrderPage.html" method="get">
+                <div class="container">
+                    <span><b>Attendance</b></span>
+                    <input class="input" id="attendanceName" type="text" placeholder="Enter Attendance Name"/>
+                    <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
+                    <button onclick="onConfirmClick()" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
