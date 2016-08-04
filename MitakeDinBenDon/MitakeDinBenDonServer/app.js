@@ -6,7 +6,8 @@ var querystring = require('querystring');
 var express = require('express');
 var app = express();
 var pathname = __dirname;
-var port = 8889;
+var port = 8888;
+var redirect = 'http://10.1.4.133:' + port + '/Main/index.html';
 
 var handle = {};
 handle["/login"] = requestHandlers.Login;
@@ -62,7 +63,10 @@ app.use(myParamter);
 
 
 app.get('/', function (req, res) {    
-    req = req;
+    res.writeHead(301,
+        { Location: redirect }
+    );
+    res.end();
 });
 
 app.post('/login', function (req, res) {
