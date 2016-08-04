@@ -33,8 +33,11 @@
     <Compile Include="JS\api\EstablishOrder.js" />
     <Compile Include="JS\api\GetAccount.js" />
     <Compile Include="JS\api\GetMenuByStoreID.js" />
+    <Compile Include="JS\api\GetOrderFormsByID.js" />
+    <Compile Include="JS\api\GetStores.js" />
     <Compile Include="JS\api\GetStoresByName.js" />
     <Compile Include="JS\api\Login.js" />
+    <Compile Include="JS\api\UpateOrderFormAttendance.js" />
     <Compile Include="JS\app.js" />
     <Compile Include="JS\Common\common.js" />
     <Compile Include="JS\Common\Connection.js" />
@@ -51,12 +54,14 @@
     <Folder Include="JS\Common\" />
     <Folder Include="typings\" />
     <Folder Include="typings\globals\" />
+    <Folder Include="typings\globals\express\" />
     <Folder Include="typings\globals\lodash\" />
     <Folder Include="typings\globals\mssql\" />
     <Folder Include="typings\globals\node-uuid\" />
     <Folder Include="typings\globals\node\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="typings\globals\express\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\lodash\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\mssql\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\node-uuid\index.d.ts" />

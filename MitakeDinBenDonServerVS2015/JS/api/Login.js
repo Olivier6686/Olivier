@@ -8,7 +8,14 @@ function login(data)
     var  response = data.response;
     var  querys    = data.query;
     var args = querystring.parse(querys);    
-    
+
+    if (request.method === "GET") {
+        response.writeHead(404, { "Content-Type": "text/plain" });
+        response.write("404 Not Found\n");
+        response.end();
+        return;
+    }
+
     console.log("Request handler 'login' was called.");
     console.log("query=" + querys);
 

@@ -7,6 +7,7 @@
     "name": "olivier"
   },
   "dependencies": {
+    "express": "^4.14.0",
     "lodash": "^4.14.0",
     "mssql": "^3.3.0",
     "node-uuid": "^1.4.7"

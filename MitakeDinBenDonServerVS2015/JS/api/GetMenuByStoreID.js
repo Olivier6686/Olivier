@@ -87,16 +87,12 @@ function getMenuByStoreID(data) {
 
                     console.dir(recordset);
                     if (recordset[0]) {                              
-                        response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin':'*'});
-                        //json = "{\"IsSucceed\":true,\"Menu\":{\"MenuID\":\"" + recordset[0].MenuID + "\", \"Items\":"+ recordset[0].Items + "}}";
-                        recordset[0].Items = new Buffer(recordset[0].Items).toString('base64');
-                        recordset[0].IsSucceed = true;
+                        response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin':'*'});                        
+                        recordset[0].Items = new Buffer(recordset[0].Items).toString('base64');                        
                         var rawobj = {};
                         rawobj.IsSucceed = true;
                         rawobj.Menu = {MenuID:recordset[0].MenuID, Items:recordset[0].Items};
-                        json = JSON.stringify(rawobj);    
-                        var o2 = JSON.parse(json);
-                        var v2 = new Buffer(o2.Menu.Items, 'base64').toString('ascii');           
+                        json = JSON.stringify(rawobj);
                         response.write(json);        
                         response.end();
                     }
