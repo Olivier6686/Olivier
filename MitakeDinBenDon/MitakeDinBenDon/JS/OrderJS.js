@@ -162,7 +162,7 @@ function onChipClick() {
     var btn = event.srcElement;
     if (!isStringEmpty(btn.data)) {
         var info = JSON.parse(btn.data);
-        setSessionStorage("StoreInfo", btn.data);
+        document.getElementById("confirmBtn").value = info.StoreID;
         showMenuModal(info);
     }
 }
@@ -243,7 +243,7 @@ function addMarker(store, geocoder) {
             marker.setMap(MapDiv);
             google.maps.event.addListener(marker, "click", function () {
                 var info = marker.data;
-                setSessionStorage("StoreInfo", JSON.stringify(info));
+                document.getElementById("confirmBtn").value = info.StoreID;
                 showMenuModal(info);
             });
         }

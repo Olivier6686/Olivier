@@ -20,21 +20,14 @@ function getParameters() {
     document.getElementById("titleSpan").innerHTML = OrderForm.Title;
     document.getElementById("descriptionSpan").innerHTML = OrderForm.Description;
     document.getElementById("expiredTimeSpan").innerHTML = OrderForm.ExpiredTime;
-
-    var storeJson = getSessionStorage("StoreInfo");
-    var store = JSON.parse(storeJson);
-
-    return store;
+    StoreID = OrderForm.StoreID;
 }
 
 function onGetOrderFormSuccess(args) {
     if (args.IsSucceed) {
         OrderForm = args.Items[0];
-        var store = getParameters();
-        StoreID = store.StoreID;
-
-        createStatisticsTable();
-        createStoreInfoTable(store);
+        getParameters();
+        getStoreByID(OrderForm.StoreID, onGetStoreByIDSuccess, onGetStoreByIDError);
     }
     else {
         setWarningMsg(true, "User name or Password failed");
@@ -42,6 +35,20 @@ function onGetOrderFormSuccess(args) {
 }
 
 function onGetOrderFormError(args) {
+    setWarningMsg(true, "Some errors occur");
+}
+
+function onGetStoreByIDSuccess(args) {
+    if (args.IsSucceed) {
+        createStatisticsTable();
+        createStoreInfoTable(args.Store);
+    }
+    else {
+        setWarningMsg(true, "User name or Password failed");
+    }
+}
+
+function onGetStoreByIDError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
@@ -60,7 +67,7 @@ function onOrderTableSuccess(args) {
         menu.Items = JSON.parse(b64DecodeUnicode(menu.Items));
         var table = document.getElementById("productTable");
         var attendanceName = getLocalStorage("AttendanceName");
-        
+
         document.getElementById("attendanceName").value = attendanceName;
 
         var tr = table.insertRow(0);
@@ -89,7 +96,7 @@ function onOrderTableSuccess(args) {
                 td.innerHTML = subCategory.Items[j].Name;
                 td = tr.insertCell(tr.cells.length);
 
-                var detail = { amount: undefined, description: undefined, checkedIndex: undefined };
+                var detail = { amount: undefined, description: undefined, checkIndex: undefined };
                 var exist = getOrderItemByName(attendanceName, subCategory.Items[j].ItemID, detail);
 
                 var prices = subCategory.Items[j].Price.split(",");
@@ -105,7 +112,7 @@ function onOrderTableSuccess(args) {
 
                 var numInput = document.createElement("input");
                 numInput.type = "number";
-                numInput.min = 0;              
+                numInput.min = 0;
                 numInput.name = "numInput";
                 if (exist)
                     numInput.value = detail.amount;
@@ -152,7 +159,7 @@ function onStatisticsTableSuccess(args) {
 
             for (var i = 0; i < OrderForm.Attendance.length; i++) {
                 var detail = { name: undefined, price: undefined };
-                var exist = getOrderItem(menu, OrderForm.Attendance[i].ItemID, detail);
+                var exist = getOrderItem(menu, OrderForm.Attendance[i].ItemID, OrderForm.Attendance[i].CheckIndex, detail);
                 if (exist) {
                     var num = table.rows.length;
                     var tr = table.insertRow(num);
@@ -192,27 +199,23 @@ function onError(args) {
 
 function getOrderItemByName(attendanceName, itemID, detail) {
     for (var i = 0; i < OrderForm.Attendance.length; i++) {
-        var realID = OrderForm.Attendance[i].ItemID.split("_")[0];
-        var index = OrderForm.Attendance[i].ItemID.split("_")[1];
-        if (OrderForm.Attendance[i].Name == attendanceName && realID == itemID) {;
+        if (OrderForm.Attendance[i].Name == attendanceName && OrderForm.Attendance[i].ItemID == itemID) {;
             detail.amount = OrderForm.Attendance[i].Amount;
             detail.description = OrderForm.Attendance[i].Description;
-            detail.checkedIndex = index;
+            detail.checkIndex = OrderForm.Attendance[i].CheckIndex;
             return true;
         }
     }
     return false;
 }
 
-function getOrderItem(menu, itemID, detail) {
-    var id = itemID.split("_")[0];
-    var index = itemID.split("_")[1];
+function getOrderItem(menu, itemID, checkIndex, detail) {
     for (var i = 0; i < menu.length; i++) {
         var subCategory = menu[i];
         for (var j = 0; j < subCategory.Items.length; j++) {
-            if (subCategory.Items[j].ItemID == id) {
+            if (subCategory.Items[j].ItemID == itemID) {
                 detail.name = subCategory.Items[j].Name;
-                detail.price = subCategory.Items[j].Price.split(",")[index];
+                detail.price = subCategory.Items[j].Price.split(",")[checkIndex];
                 return true;
             }
         }
@@ -242,12 +245,11 @@ function onConfirmClick() {
         return;
     }
 
+    var atendance = createAttendanceToSend(name);
     setLocalStorage("AttendanceName", name);
-
-    var attendance = createAttendanceToSend(name);
     var api = ServerURL + "/UpateOrderFormAttendance";
     var parameter = {
-        param: { OrderFormID: OrderForm.OrderFormID, Attendance: attendance },
+        param: { OrderFormID: OrderForm.OrderFormID, Attendance: atendance },
         type: "POST",
         success: (args) => { onUpateOrderFormAttendanceSuccess(args) },
         error: (args) => { onUpateOrderFormAttendanceError(args) }
@@ -265,10 +267,10 @@ function createAttendanceToSend(name) {
         if (num.value > 0) {
             var td = num.parentNode; //num的parent為td
             var tr = td.parentNode; //td的parent為tr
-            var selectedID = getCheckPriceID(tr.cells[1]);
-
-            if (selectedID != undefined) {
-                var attendance = { Name: name, ItemID: selectedID, Amount: tr.cells[2].childNodes[0].value, Description: tr.cells[3].childNodes[0].value }
+            var detail = { itemID: undefined, checkIndex: undefined };
+            var exist = getCheckPriceID(tr.cells[1], detail); //找到了哪一個子項目被選取了
+            if (exist) {           
+                var attendance = { Name: name, ItemID: detail.itemID, CheckIndex: detail.checkIndex, Amount: tr.cells[2].childNodes[0].value, Description: tr.cells[3].childNodes[0].value }
                 attendanceList.push(attendance);
             }
         }
@@ -277,21 +279,22 @@ function createAttendanceToSend(name) {
     return JSON.stringify(attendanceList);
 }
 
-function getCheckPriceID(td) {
+function getCheckPriceID(td, detail) {
     for (var i = 0; i < td.children.length; i++) {
-        if (td.children[i].checked)
-        {
+        if (td.children[i].checked) {
             var itemID = td.children[i].name.split("_")[1];
-            var id = itemID + "_" + td.children[i].id;
-            return id;
+            detail.itemID = itemID;
+            detail.checkIndex = td.children[i].id;
+            return true;
         }
     }
+    return false;
 }
 
 function onUpateOrderFormAttendanceSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        window.location.assign("OrderPage.html");
+        window.location.assign("OrderPage.html#ongoingSection");
     }
     else {
         setWarningMsg(true, "User name or Password failed");

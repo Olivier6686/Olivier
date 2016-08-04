@@ -153,6 +153,18 @@ function onGetMenuError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
+function getStoreByID(id, onGetStoreByIDSuccess, onGetStoreByIDError) {
+    var api = ServerURL + "/GetStoreByID";
+    var parameter = {
+        param: { StoreID: id },
+        type: "GET",
+        success: (args) => { onGetStoreByIDSuccess(args) },
+        error: (args) => { onGetStoreByIDError(args) }
+    }
+
+    query(api, parameter);
+}
+
 function createStoreInfoTable(store) {
     var table = document.getElementById("informationTable");
     for (var propertyName in store) {
