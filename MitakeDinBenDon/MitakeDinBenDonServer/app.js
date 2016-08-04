@@ -1,11 +1,12 @@
-var server = require("./server");
-var route  = require("./router");
-var requestHandlers = require("./requestHandlers");
+var server = require("./js/server");
+var route  = require("./js/router");
+var requestHandlers = require("./js/requestHandlers");
 var url = require("url");
 var querystring = require('querystring');
 var express = require('express');
 var app = express();
 var pathname = __dirname;
+var port = 8889;
 
 var handle = {};
 handle["/login"] = requestHandlers.Login;
@@ -15,9 +16,10 @@ handle["/EstablishOrder"] = requestHandlers.EstablishOrder;
 handle["/GetOrderFormsByID"] = requestHandlers.GetOrderFormsByID;
 handle["/UpateOrderFormAttendance"] = requestHandlers.UpateOrderFormAttendance;
 handle["/GetStores"] = requestHandlers.GetStores;
+handle["/GetStoreByID"] = requestHandlers.GetStoreByID;
 
-app.use('/Main', express.static('D:\\Git\\Olivier\\MitakeDinBenDon\\MitakeDinBenDon'));
 
+app.use('/Main', express.static(pathname.replace('MitakeDinBenDonServer', 'MitakeDinBenDon')));
 
 var myParamter = function (req, res, next) {
     var postData = "";
@@ -31,9 +33,29 @@ var myParamter = function (req, res, next) {
     data.response = res;    
     data.pathname = pathname;
     data.query = query;
-    req.data = data;
+    
+    if (req.method === 'GET') {
+        data.query = query;
+        req.data = data;
+        next();
+        return;
+    }
+    else if (req.method === 'POST') {
+        req.addListener("data", function (postDataChunk) {
+            postData += postDataChunk;
+        });
 
-    next();
+        req.addListener("end", function () {
+            data.query = postData;
+            req.data = data;
+            next();
+        });
+    }
+    else {
+        data.query = postData;
+        req.data = data;
+        next();
+    }
 };
 
 app.use(myParamter);
@@ -78,5 +100,10 @@ app.get('/GetStores', function (req, res) {
     handle["/GetStores"](data);
 });
 
-app.listen(3000);
+app.get('/GetStoreByID', function (req, res) {
+    var data = req.data;
+    handle["/GetStoreByID"](data);
+});
+
+app.listen(port);
 //server.start(route.route, handle);

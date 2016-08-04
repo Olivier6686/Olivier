@@ -12,7 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b5ff01ba-af21-4159-91fb-d8c44392e093</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>JS\app.js</StartupFile>
+    <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -34,11 +34,12 @@
     <Compile Include="JS\api\GetAccount.js" />
     <Compile Include="JS\api\GetMenuByStoreID.js" />
     <Compile Include="JS\api\GetOrderFormsByID.js" />
+    <Compile Include="JS\api\GetStoreByID.js" />
     <Compile Include="JS\api\GetStores.js" />
     <Compile Include="JS\api\GetStoresByName.js" />
     <Compile Include="JS\api\Login.js" />
     <Compile Include="JS\api\UpateOrderFormAttendance.js" />
-    <Compile Include="JS\app.js" />
+    <Compile Include="app.js" />
     <Compile Include="JS\Common\common.js" />
     <Compile Include="JS\Common\Connection.js" />
     <Compile Include="JS\requestHandlers.js" />
