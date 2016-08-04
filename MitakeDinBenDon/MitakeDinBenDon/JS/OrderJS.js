@@ -1,4 +1,4 @@
-﻿var modal;
+﻿var Modal, MapDiv;
 
 function setOngoingAnimation() {
     var acc = document.getElementsByClassName("accordion");
@@ -23,7 +23,7 @@ function getOrderItemByUserName() {
             return item.OrderFormID;
         }).join(",");
 
-        var api = serverURL + "/GetOrderFormsByID";
+        var api = ServerURL + "/GetOrderFormsByID";
         var parameter = {
             param: { OrderFormIDs: GUIDs },
             type: "GET",
@@ -124,7 +124,7 @@ function generateSearchItem(stores) {
 }
 
 function searchStores(keyword) {
-    var api = serverURL + "/GetStoresByName";
+    var api = ServerURL + "/GetStoresByName";
     var parameter = {
         param: { Name: keyword },
         type: "GET",
@@ -172,20 +172,20 @@ function showMenuModal(store) {
     document.getElementById("modalAddress").innerHTML = store.Address;
 
     createProduceTable(store.StoreID);
-    modal = document.getElementById("modalForm");
-    modal.style.display = "block";
+    Modal = document.getElementById("modalForm");
+    Modal.style.display = "block";
     document.getElementById("outerBody").style.overflowY = "hidden";
 }
 
 function onMenuCancelClick() {
-    modal.style.display = "none";
+    Modal.style.display = "none";
     document.getElementById("outerBody").style.overflowY = "scroll";
     clearChild("productTable");
 }
 
 window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    if (event.target == Modal) {
+        Modal.style.display = "none";
         document.getElementById("outerBody").style.overflowY = "scroll";
         clearChild("productTable");
     }
@@ -216,15 +216,45 @@ function openTab(event, methodName) {
 
 function initailMap() {
     if (navigator.geolocation) {
-        var mapCanvas = document.getElementById("map");
-        var mapOptions = { center: new google.maps.LatLng(25.055297, 121.5272828), zoom: 14 }
-        var map = new google.maps.Map(mapCanvas, mapOptions);
-        showNearbyStores(map);
+        if (MapDiv == undefined) {
+            var mapCanvas = document.getElementById("map");
+            var mapOptions = { center: new google.maps.LatLng(25.055297, 121.5272828), zoom: 14 }
+            MapDiv = new google.maps.Map(mapCanvas, mapOptions);
+            getStores();
+        }
     }
 }
 
+function showNearbyStores(storeInfos) {
+    var geocoder = new google.maps.Geocoder();
+    for (var i = 0; i < storeInfos.length; i++) {
+        var store = storeInfos[i];
+        addMarker(store, geocoder);
+    }
+}
+
+function addMarker(store, geocoder) {
+    geocoder.geocode({ "address": store.Address }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var location = results[0].geometry.location;
+            var storeLatlng = new google.maps.LatLng(location.lat(), location.lng());
+            var marker = new google.maps.Marker({ position: storeLatlng, title: store["StoreName"] });
+            marker.data = store;
+            marker.setMap(MapDiv);
+            google.maps.event.addListener(marker, "click", function () {
+                var info = marker.data;
+                setSessionStorage("StoreInfo", JSON.stringify(info));
+                showMenuModal(info);
+            });
+        }
+        else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+            setTimeout(function () { addMarker(store, geocoder); }, (3000));
+        }
+    });
+}
+
 function getStores() {
-    var api = serverURL + "/GetStores";
+    var api = ServerURL + "/GetStores";
     var parameter = {
         param: "",
         type: "GET",
@@ -238,10 +268,7 @@ function getStores() {
 function onGetStoresSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        setSessionStorage("UserName", args.UserName);
-        var decodedOrderList = atob(args.OrderList);
-        setSessionStorage("OrderList", decodedOrderList);
-        window.location.assign("HTML/OrderPage.html");
+        showNearbyStores(args.Stores);
     }
     else {
         setWarningMsg(true, "User name or Password failed");
@@ -250,25 +277,4 @@ function onGetStoresSuccess(args) {
 
 function onGetStoresError(args) {
     setWarningMsg(true, "Some errors occur");
-}
-
-function showNearbyStores(map) {
-    getStores();
-    var storeInfos = JSON.parse(storesJson);
-    for (var i = 0; i < storeInfos.length; i++) {
-        var store = storeInfos[i];
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ "address": store["Address"] }, function (results, status) {
-            var location = results[0].geometry.location;
-            var storeLatlng = new google.maps.LatLng(location.lat(), location.lng());
-            var marker = new google.maps.Marker({ position: storeLatlng, title: store["StoreName"] });
-            marker.data = store;
-            marker.setMap(map);
-            google.maps.event.addListener(marker, "click", function () {
-                var info = marker.data;
-                setSessionStorage("StoreInfo", JSON.stringify(info));
-                showMenuModal(info);
-            });
-        });
-    }
 }

@@ -1,9 +1,9 @@
-﻿var storeID;
+﻿var StoreID;
 
 function queryStoreInfo() {
     var storeJson = getSessionStorage("StoreInfo");
     var store = JSON.parse(storeJson);
-    storeID = store.StoreID;
+    StoreID = store.StoreID;
     createProduceTable(store.StoreID);
     createStoreInfoTable(store);
     showMap(store["StoreName"], store["Address"]);
@@ -28,24 +28,6 @@ function test() {
 
         //    var ss = google.maps.geometry.spherical.computeDistanceBetween(location, location2);
         //});
-
-
-
-        //var marker = new google.maps.Marker({ position: storeLatlng, title: s1["StoreName"] });
-        //marker.setMap(map);
-
-
-        //for (var i = 1; i < storeInfos.length; i++) {
-        //    var store = storeInfos[i];
-        //    var geocoder = new google.maps.Geocoder();
-        //    geocoder.geocode({ "address": store["Address"] }, function (results, status) {
-        //        var location = results[0].geometry.location;
-        //        var storeLatlng = new google.maps.LatLng(location.lat(), location.lng());
-        //        var marker = new google.maps.Marker({ position: storeLatlng, title: store["StoreName"] });
-        //        marker.setMap(map);
-        //    });
-        //}
-
     });
 }
 
@@ -92,9 +74,9 @@ function onConfirmClick() {
     }
 
     var normalizeTime = time.replace("T", " ");
-    var api = serverURL + "/EstablishOrder";
+    var api = ServerURL + "/EstablishOrder";
     var parameter = {
-        param: { StoreID: storeID, Owner: owner, Title: title, Description: des, ExpiredTime: normalizeTime, Attendance: "" },
+        param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: normalizeTime, Attendance: "" },
         type: "POST",
         success: (args) => { onCreateSuccess(args) },
         error: (args) => { onCreateError(args) }

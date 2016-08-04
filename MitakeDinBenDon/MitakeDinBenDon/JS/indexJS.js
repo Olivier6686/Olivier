@@ -5,7 +5,7 @@
     if (isStringEmpty(name) || isStringEmpty(psw))
         setWarningMsg(true, "Please fill user name and password");
 
-    var api = serverURL + "/login";
+    var api = ServerURL + "/login";
     var parameter = {
         param: { UserName: name, Password: psw },
         type: "POST",

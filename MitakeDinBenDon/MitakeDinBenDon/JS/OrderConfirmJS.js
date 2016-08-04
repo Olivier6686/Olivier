@@ -1,12 +1,11 @@
-﻿var orderForm;
-var modal;
-var storeID;
+﻿var OrderForm;
+var StoreID;
 
 function queryStoreInfo() {
     var url = window.location.search;
     var id = getParameterByName("OrderFormID", url);
 
-    var api = serverURL + "/GetOrderFormsByID";
+    var api = ServerURL + "/GetOrderFormsByID";
     var parameter = {
         param: { OrderFormIDs: id },
         type: "GET",
@@ -18,9 +17,9 @@ function queryStoreInfo() {
 }
 
 function getParameters() {
-    document.getElementById("titleSpan").innerHTML = orderForm.Title;
-    document.getElementById("descriptionSpan").innerHTML = orderForm.Description;
-    document.getElementById("expiredTimeSpan").innerHTML = orderForm.ExpiredTime;
+    document.getElementById("titleSpan").innerHTML = OrderForm.Title;
+    document.getElementById("descriptionSpan").innerHTML = OrderForm.Description;
+    document.getElementById("expiredTimeSpan").innerHTML = OrderForm.ExpiredTime;
 
     var storeJson = getSessionStorage("StoreInfo");
     var store = JSON.parse(storeJson);
@@ -30,9 +29,9 @@ function getParameters() {
 
 function onGetOrderFormSuccess(args) {
     if (args.IsSucceed) {
-        orderForm = args.Items[0];
+        OrderForm = args.Items[0];
         var store = getParameters();
-        storeID = store.StoreID;
+        StoreID = store.StoreID;
 
         createStatisticsTable();
         createStoreInfoTable(store);
@@ -47,13 +46,11 @@ function onGetOrderFormError(args) {
 }
 
 function createOrderTable() {
-    //var menu = JSON.parse(menuJson);
-    queryMenu(storeID, onOrderTableSuccess, onError);
+    queryMenu(StoreID, onOrderTableSuccess, onError);
 }
 
 function createStatisticsTable() {
-    //var menu = JSON.parse(menuJson);
-    queryMenu(storeID, onStatisticsTableSuccess, onError);
+    queryMenu(StoreID, onStatisticsTableSuccess, onError);
 }
 
 function onOrderTableSuccess(args) {
@@ -63,7 +60,7 @@ function onOrderTableSuccess(args) {
         menu.Items = JSON.parse(b64DecodeUnicode(menu.Items));
         var table = document.getElementById("productTable");
         var attendanceName = getLocalStorage("AttendanceName");
-        attendanceName = "alvin.wang";
+        
         document.getElementById("attendanceName").value = attendanceName;
 
         var tr = table.insertRow(0);
@@ -88,15 +85,28 @@ function onOrderTableSuccess(args) {
                 var num = table.rows.length;
                 var tr = table.insertRow(num);
                 td = tr.insertCell(tr.cells.length);
+                td.id = subCategory.Items[j].ItemID;
                 td.innerHTML = subCategory.Items[j].Name;
                 td = tr.insertCell(tr.cells.length);
-                td.innerHTML = subCategory.Items[j].Price;
 
-                var detail = { amount: undefined, description: undefined };
+                var detail = { amount: undefined, description: undefined, checkedIndex: undefined };
                 var exist = getOrderItemByName(attendanceName, subCategory.Items[j].ItemID, detail);
+
+                var prices = subCategory.Items[j].Price.split(",");
+                for (var k = 0; k < prices.length; k++) {
+                    var price = prices[k].split(":");
+                    var num = price.length == 2 ? price[1] : price[0];
+                    var tail = '">';
+                    if (exist)
+                        tail = '" checked>';
+                    var genStr = '<input type="radio" id="' + k + '" name="price_' + subCategory.Items[j].ItemID + '"value="' + num + tail + prices[k];
+                    td.innerHTML += genStr;
+                }
 
                 var numInput = document.createElement("input");
                 numInput.type = "number";
+                numInput.min = 0;              
+                numInput.name = "numInput";
                 if (exist)
                     numInput.value = detail.amount;
                 td = tr.insertCell(tr.cells.length);
@@ -119,10 +129,12 @@ function onOrderTableSuccess(args) {
 function onStatisticsTableSuccess(args) {
     if (args.IsSucceed) {
         clearChild("productTable");
-        var menu = JSON.parse(menuJson);
+        var menu = JSON.parse(b64DecodeUnicode(args.Menu.Items));
         var table = document.getElementById("productTable");
+        if (!isStringEmpty(OrderForm.Attendance))
+            OrderForm.Attendance = JSON.parse(OrderForm.Attendance);
 
-        if (orderForm.Attendance.length > 0) {
+        if (OrderForm.Attendance.length > 0) {
             document.getElementById("emptyMsg").style.opacity = 0;
             var total = 0;
 
@@ -138,23 +150,23 @@ function onStatisticsTableSuccess(args) {
             td = tr.insertCell(4);
             td.innerHTML = "Description";
 
-            for (var i = 0; i < orderForm.Attendance.length; i++) {
+            for (var i = 0; i < OrderForm.Attendance.length; i++) {
                 var detail = { name: undefined, price: undefined };
-                var exist = getOrderItem(menu, orderForm.Attendance[i].ItemID, detail);
+                var exist = getOrderItem(menu, OrderForm.Attendance[i].ItemID, detail);
                 if (exist) {
                     var num = table.rows.length;
                     var tr = table.insertRow(num);
                     td = tr.insertCell(tr.cells.length);
                     td.innerHTML = detail.name;
                     td = tr.insertCell(tr.cells.length);
-                    td.innerHTML = orderForm.Attendance[i].Amount;
+                    td.innerHTML = OrderForm.Attendance[i].Amount;
                     td = tr.insertCell(tr.cells.length);
                     td.innerHTML = detail.price;
                     td = tr.insertCell(tr.cells.length);
-                    td.innerHTML = orderForm.Attendance[i].Name;
+                    td.innerHTML = OrderForm.Attendance[i].Name;
                     td = tr.insertCell(tr.cells.length);
-                    td.innerHTML = orderForm.Attendance[i].Description;
-                    total += parseInt(detail.price, 10);
+                    td.innerHTML = OrderForm.Attendance[i].Description;
+                    total += calculateTotalPrice(OrderForm.Attendance[i].Amount, detail.price);
                 }
             }
 
@@ -179,10 +191,13 @@ function onError(args) {
 }
 
 function getOrderItemByName(attendanceName, itemID, detail) {
-    for (var i = 0; i < orderForm.Attendance.length; i++) {
-        if (orderForm.Attendance[i].Name == attendanceName && orderForm.Attendance[i].ItemID == itemID) {;
-            detail.amount = orderForm.Attendance[i].Amount;
-            detail.description = orderForm.Attendance[i].Description;
+    for (var i = 0; i < OrderForm.Attendance.length; i++) {
+        var realID = OrderForm.Attendance[i].ItemID.split("_")[0];
+        var index = OrderForm.Attendance[i].ItemID.split("_")[1];
+        if (OrderForm.Attendance[i].Name == attendanceName && realID == itemID) {;
+            detail.amount = OrderForm.Attendance[i].Amount;
+            detail.description = OrderForm.Attendance[i].Description;
+            detail.checkedIndex = index;
             return true;
         }
     }
@@ -190,17 +205,26 @@ function getOrderItemByName(attendanceName, itemID, detail) {
 }
 
 function getOrderItem(menu, itemID, detail) {
-    for (var i = 0; i < menu.Items.length; i++) {
-        var subCategory = menu.Items[i];
+    var id = itemID.split("_")[0];
+    var index = itemID.split("_")[1];
+    for (var i = 0; i < menu.length; i++) {
+        var subCategory = menu[i];
         for (var j = 0; j < subCategory.Items.length; j++) {
-            if (subCategory.Items[j].ItemID == itemID) {
+            if (subCategory.Items[j].ItemID == id) {
                 detail.name = subCategory.Items[j].Name;
-                detail.price = subCategory.Items[j].Price;
+                detail.price = subCategory.Items[j].Price.split(",")[index];
                 return true;
             }
         }
     }
     return false;
+}
+
+function calculateTotalPrice(amount, price) {
+    var itemPrice = price.split(":");
+    var num = itemPrice.length == 2 ? itemPrice[1] : itemPrice[0];
+    var total = parseInt(amount, 10) * parseInt(num, 10);
+    return total;
 }
 
 function onOrderClick() {
@@ -219,8 +243,61 @@ function onConfirmClick() {
     }
 
     setLocalStorage("AttendanceName", name);
-    //TODO: update orderform
 
-    window.location.assign("OrderPage.html");
+    var attendance = createAttendanceToSend(name);
+    var api = ServerURL + "/UpateOrderFormAttendance";
+    var parameter = {
+        param: { OrderFormID: OrderForm.OrderFormID, Attendance: attendance },
+        type: "POST",
+        success: (args) => { onUpateOrderFormAttendanceSuccess(args) },
+        error: (args) => { onUpateOrderFormAttendanceError(args) }
+    }
+
+    query(api, parameter);
 }
 
+function createAttendanceToSend(name) {
+    var table = document.getElementById("productTable");
+    var nums = document.getElementsByName("numInput");
+    var attendanceList = [];
+    for (var i = 0; i < nums.length; i++) {
+        var num = nums[i];
+        if (num.value > 0) {
+            var td = num.parentNode; //num的parent為td
+            var tr = td.parentNode; //td的parent為tr
+            var selectedID = getCheckPriceID(tr.cells[1]);
+
+            if (selectedID != undefined) {
+                var attendance = { Name: name, ItemID: selectedID, Amount: tr.cells[2].childNodes[0].value, Description: tr.cells[3].childNodes[0].value }
+                attendanceList.push(attendance);
+            }
+        }
+    }
+
+    return JSON.stringify(attendanceList);
+}
+
+function getCheckPriceID(td) {
+    for (var i = 0; i < td.children.length; i++) {
+        if (td.children[i].checked)
+        {
+            var itemID = td.children[i].name.split("_")[1];
+            var id = itemID + "_" + td.children[i].id;
+            return id;
+        }
+    }
+}
+
+function onUpateOrderFormAttendanceSuccess(args) {
+    if (args.IsSucceed) {
+        setWarningMsg(false, "");
+        window.location.assign("OrderPage.html");
+    }
+    else {
+        setWarningMsg(true, "User name or Password failed");
+    }
+}
+
+function onUpateOrderFormAttendanceError(args) {
+    setWarningMsg(true, "Some errors occur");
+}
