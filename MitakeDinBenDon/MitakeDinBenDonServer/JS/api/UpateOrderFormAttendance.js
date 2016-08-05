@@ -61,7 +61,9 @@ function upateOrderFormAttendance(data) {
     }
 
     getOrder(args.OrderFormID, function (recordset) {
-        var database = JSON.parse(recordset.Attendance);
+        var database = [];
+        if (recordset.Attendance) 
+            database = JSON.parse(recordset.Attendance);
         var modify = JSON.parse(args.Attendance);
         var match = false;
         for (i = 0; i < modify.length; i++) {
