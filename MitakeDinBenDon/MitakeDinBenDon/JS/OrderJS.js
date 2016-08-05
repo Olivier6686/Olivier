@@ -54,7 +54,7 @@ function onGetOrderFormSuccess(args) {
         setOngoingAnimation();
     }
     else {
-        setWarningMsg(true, "User name or Password failed");
+        setWarningMsg(true, args.exception.message);
     }
 }
 
@@ -227,6 +227,7 @@ function initailMap() {
 
 function showNearbyStores(storeInfos) {
     var geocoder = new google.maps.Geocoder();
+
     for (var i = 0; i < storeInfos.length; i++) {
         var store = storeInfos[i];
         addMarker(store, geocoder);
@@ -248,6 +249,7 @@ function addMarker(store, geocoder) {
             });
         }
         else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+            console.log(status);
             setTimeout(function () { addMarker(store, geocoder); }, (3000));
         }
     });

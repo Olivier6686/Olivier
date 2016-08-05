@@ -91,6 +91,7 @@ function onConfirmClick() {
     var api = ServerURL + "/EstablishOrder";
     var parameter = {
         param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: normalizeTime, Attendance: "" },
+        //param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: inputDate, Attendance: "" },
         type: "POST",
         success: (args) => { onCreateSuccess(args) },
         error: (args) => { onCreateError(args) }
@@ -106,7 +107,7 @@ function onCreateSuccess(args) {
         updateOrderList(args.OrderForm);
     }
     else {
-        setWarningMsg(true, "User name or Password failed");
+        setWarningMsg(true, "Parameter error");
     }
 }
 

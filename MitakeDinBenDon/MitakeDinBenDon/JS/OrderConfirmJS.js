@@ -4,7 +4,19 @@ var StoreID;
 function queryStoreInfo() {
     var url = window.location.search;
     var id = getParameterByName("OrderFormID", url);
+    getOrderFormsByID(id);
+    //var api = ServerURL + "/GetOrderFormsByID";
+    //var parameter = {
+    //    param: { OrderFormIDs: id },
+    //    type: "GET",
+    //    success: (args) => { onGetOrderFormSuccess(args) },
+    //    error: (args) => { onGetOrderFormError(args) }
+    //}
 
+    //query(api, parameter);
+}
+
+function getOrderFormsByID(id) {
     var api = ServerURL + "/GetOrderFormsByID";
     var parameter = {
         param: { OrderFormIDs: id },
@@ -114,6 +126,7 @@ function onOrderTableSuccess(args) {
                 numInput.type = "number";
                 numInput.min = 0;
                 numInput.name = "numInput";
+                numInput.onchange = onNumberChange;
                 if (exist)
                     numInput.value = detail.amount;
                 td = tr.insertCell(tr.cells.length);
@@ -130,6 +143,23 @@ function onOrderTableSuccess(args) {
     }
     else {
         setWarningMsg(true, "Parameter error!");
+    }
+}
+
+function onNumberChange(val) {
+    var num = val.currentTarget;
+    if (num.value == 0) {
+        num.value = "";
+        var td = num.parentNode; //num的parent為td
+        var tr = td.parentNode;
+
+        var rbs = tr.cells[1].getElementsByTagName('input'); //radio buttons
+        for (var i = 0; i < rbs.length; i++) {
+            rbs[i].checked = false;
+        }
+
+        var description = tr.cells[3].childNodes[0]; //input text
+        description.value = "";
     }
 }
 
@@ -294,10 +324,13 @@ function getCheckPriceID(td, detail) {
 function onUpateOrderFormAttendanceSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        window.location.assign("OrderPage.html#ongoingSection");
+        //window.location.assign("OrderPage.html#");
+        document.getElementById("attendanceDiv").style.display = "none";
+        document.getElementById("emptyDiv").style.display = "block";
+        getOrderFormsByID(OrderForm.OrderFormID);
     }
     else {
-        setWarningMsg(true, "User name or Password failed");
+        setWarningMsg(true, "Order failed");
     }
 }
 
