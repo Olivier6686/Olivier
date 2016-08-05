@@ -99,6 +99,11 @@ app.post('/UpateOrderFormAttendance', function (req, res) {
     handle["/UpateOrderFormAttendance"](data);
 });
 
+app.get('/UpateOrderFormAttendance', function (req, res) {
+    var data = req.data;
+    handle["/UpateOrderFormAttendance"](data);
+});
+
 app.get('/GetStores', function (req, res) {      
     var data = req.data;
     handle["/GetStores"](data);
