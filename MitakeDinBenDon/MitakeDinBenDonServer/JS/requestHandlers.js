@@ -6,6 +6,7 @@ var getOrderFormsByID = require('./api/GetOrderFormsByID.js');
 var upateOrderFormAttendance = require('./api/UpateOrderFormAttendance.js');
 var getStores = require('./api/GetStores.js');
 var getStoreByID = require('./api/GetStoreByID.js');
+var deleteOrderFormItem = require('./api/DeleteOrderFormItem.js');
 
 exports.Login = login.login;
 exports.GetStoresByName = getStoresByName.GetStoresByName;
@@ -15,3 +16,4 @@ exports.GetOrderFormsByID = getOrderFormsByID.GetOrderFormsByID;
 exports.UpateOrderFormAttendance = upateOrderFormAttendance.UpateOrderFormAttendance;
 exports.GetStores = getStores.GetStores;
 exports.GetStoreByID = getStoreByID.GetStoreByID;
+exports.DeleteOrderFormItem = deleteOrderFormItem.DeleteOrderFormItem;

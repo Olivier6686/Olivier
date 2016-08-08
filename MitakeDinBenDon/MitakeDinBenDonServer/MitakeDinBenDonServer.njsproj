@@ -30,6 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="JS\api\DeleteOrderFormItem.js" />
     <Compile Include="JS\api\EstablishOrder.js" />
     <Compile Include="JS\api\GetAccount.js" />
     <Compile Include="JS\api\GetMenuByStoreID.js" />

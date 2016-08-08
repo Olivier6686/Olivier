@@ -1,6 +1,11 @@
-var passwordError = {'name':'PasswordError', 'message':'Password is wrong.', 'code':'0'};
+var sql = require('mssql');
+var connection = require('../Common/connection.js')
+
+var passwordError = { 'name': 'PasswordError', 'message': 'Password is wrong.', 'code': '0' };
 var parameterInputError = {'name':'parameterInputError', 'message':'parameter is error.', 'code':'1'};
 var NotFoundDataError = {'name':'NotFoundDataError', 'message':'Data not found.', 'code':'2'};
+
+
 
 var ErrorMap = [passwordError, parameterInputError, NotFoundDataError];
 
@@ -46,6 +51,42 @@ function getAccount(data, callback)
 	});
 }
 
+function getOrder(id, callback) {
+    var sqlRequest = new sql.Request(connection);
+    sqlRequest.input('id', id);
+    query = 'select * from OrderForm where OrderFormID=@id';
+    sqlRequest.query(query).then(function (recordset) {
+        if (callback)
+            callback(recordset[0]);
+    }).catch(function (err) {
+        console.dir(err);
+        common.ReturnError(err, response);
+        return;
+    });
+}
+
+function updateAttendance(response, id, attendance) {
+    var sqlRequest = new sql.Request(connection);
+    sqlRequest.input('id', id);
+    sqlRequest.input('attendance', attendance);
+    query = 'UPDATE OrderForm SET Attendance=@attendance WHERE OrderFormID=@id';
+    console.log("sql command =" + query);
+    // or request.execute(procedure);
+    sqlRequest.query(query).then(function (recordset) {
+        var ret = { IsSucceed: true };
+        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+        json = JSON.stringify(ret);
+        response.write(json);
+        response.end();
+    }).catch(function (err) {
+        console.dir(err);
+        common.ReturnError(err, response);
+        return;
+    });
+}
 
 exports.ReturnError = ReturnError;
 exports.ErrorMap = ErrorMap;
+
+exports.getOrder = getOrder;
+exports.updateAttendance = updateAttendance;

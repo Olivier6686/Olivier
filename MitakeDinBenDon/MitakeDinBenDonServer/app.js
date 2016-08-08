@@ -18,6 +18,7 @@ handle["/GetOrderFormsByID"] = requestHandlers.GetOrderFormsByID;
 handle["/UpateOrderFormAttendance"] = requestHandlers.UpateOrderFormAttendance;
 handle["/GetStores"] = requestHandlers.GetStores;
 handle["/GetStoreByID"] = requestHandlers.GetStoreByID;
+handle["/DeleteOrderFormItem"] = requestHandlers.DeleteOrderFormItem;
 
 
 app.use('/Main', express.static(pathname.replace('MitakeDinBenDonServer', 'MitakeDinBenDon')));
@@ -112,6 +113,11 @@ app.get('/GetStores', function (req, res) {
 app.get('/GetStoreByID', function (req, res) {
     var data = req.data;
     handle["/GetStoreByID"](data);
+});
+
+app.get('/DeleteOrderFormItem', function (req, res) {
+    var data = req.data;
+    handle["/DeleteOrderFormItem"](data);
 });
 
 app.listen(port);
