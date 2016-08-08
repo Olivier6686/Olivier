@@ -1,12 +1,26 @@
 ﻿var StoreID;
 
 function queryStoreInfo() {
-    var storeJson = getSessionStorage("StoreInfo");
-    var store = JSON.parse(storeJson);
-    StoreID = store.StoreID;
-    createProduceTable(store.StoreID);
-    createStoreInfoTable(store);
-    showMap(store["StoreName"], store["Address"]);
+    var url = window.location.search;
+    StoreID = getParameterByName("StoreID", url);
+    getStoreByID(StoreID, onGetStoreByIDSuccess, onGetStoreByIDError);
+    //var storeJson = getSessionStorage("StoreInfo");
+    //var store = JSON.parse(storeJson);
+}
+
+function onGetStoreByIDSuccess(args) {
+    if (args.IsSucceed) {
+        createProduceTable(StoreID);
+        createStoreInfoTable(args.Store);
+        showMap(args.Store["StoreName"], args.Store["Address"]);
+    }
+    else {
+        setWarningMsg(true, "User name or Password failed");
+    }
+}
+
+function onGetStoreByIDError(args) {
+    setWarningMsg(true, "Some errors occur");
 }
 
 function test() {
@@ -77,6 +91,7 @@ function onConfirmClick() {
     var api = ServerURL + "/EstablishOrder";
     var parameter = {
         param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: normalizeTime, Attendance: "" },
+        //param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: inputDate, Attendance: "" },
         type: "POST",
         success: (args) => { onCreateSuccess(args) },
         error: (args) => { onCreateError(args) }
@@ -92,7 +107,7 @@ function onCreateSuccess(args) {
         updateOrderList(args.OrderForm);
     }
     else {
-        setWarningMsg(true, "User name or Password failed");
+        setWarningMsg(true, "Parameter error");
     }
 }
 

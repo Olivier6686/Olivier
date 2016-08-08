@@ -54,7 +54,7 @@ function onGetOrderFormSuccess(args) {
         setOngoingAnimation();
     }
     else {
-        setWarningMsg(true, "User name or Password failed");
+        setWarningMsg(true, args.exception.message);
     }
 }
 
@@ -162,7 +162,7 @@ function onChipClick() {
     var btn = event.srcElement;
     if (!isStringEmpty(btn.data)) {
         var info = JSON.parse(btn.data);
-        setSessionStorage("StoreInfo", btn.data);
+        document.getElementById("confirmBtn").value = info.StoreID;
         showMenuModal(info);
     }
 }
@@ -227,6 +227,7 @@ function initailMap() {
 
 function showNearbyStores(storeInfos) {
     var geocoder = new google.maps.Geocoder();
+
     for (var i = 0; i < storeInfos.length; i++) {
         var store = storeInfos[i];
         addMarker(store, geocoder);
@@ -243,11 +244,12 @@ function addMarker(store, geocoder) {
             marker.setMap(MapDiv);
             google.maps.event.addListener(marker, "click", function () {
                 var info = marker.data;
-                setSessionStorage("StoreInfo", JSON.stringify(info));
+                document.getElementById("confirmBtn").value = info.StoreID;
                 showMenuModal(info);
             });
         }
         else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+            console.log(status);
             setTimeout(function () { addMarker(store, geocoder); }, (3000));
         }
     });

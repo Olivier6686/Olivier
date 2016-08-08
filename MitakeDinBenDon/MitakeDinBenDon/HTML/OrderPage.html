@@ -68,7 +68,7 @@
          </div>-->
     </div>
 
-    <form id="modalForm" class="modal" action="StorePage.html">
+    <form id="modalForm" class="modal" action="StorePage.html" method="get">
         <div class="modal-content">
             <div style="background-color:#90EE90">
                 <p id="modalTitle" style="font-size:25px;text-align:center;color:#888888;padding:20px 0 0 0"></p>
@@ -76,7 +76,7 @@
             </div>
             <table id="productTable"></table>
             <div>
-                <button type="submit" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
+                <button type="submit" id="confirmBtn" name="StoreID" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
                 <button type="button" style="background-color:#FFA07A;width:45%;float:right;font-size:16px" onclick="onMenuCancelClick()">Cancel</button>
             </div>
         </div>
