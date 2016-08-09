@@ -20,7 +20,6 @@ handle["/GetStores"] = requestHandlers.GetStores;
 handle["/GetStoreByID"] = requestHandlers.GetStoreByID;
 handle["/DeleteOrderFormItem"] = requestHandlers.DeleteOrderFormItem;
 
-
 app.use('/Main', express.static(pathname.replace('MitakeDinBenDonServer', 'MitakeDinBenDon')));
 
 var myParamter = function (req, res, next) {
@@ -115,7 +114,7 @@ app.get('/GetStoreByID', function (req, res) {
     handle["/GetStoreByID"](data);
 });
 
-app.get('/DeleteOrderFormItem', function (req, res) {
+app.post('/DeleteOrderFormItem', function (req, res) {
     var data = req.data;
     handle["/DeleteOrderFormItem"](data);
 });

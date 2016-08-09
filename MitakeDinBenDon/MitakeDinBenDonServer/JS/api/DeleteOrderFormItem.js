@@ -14,7 +14,7 @@ function deleteOrderFormItem(data) {
 
     console.log("Request handler '/DeleteOrderFormItem' was called.");
 
-    if (!args.OrderFormID || !args.ItemID || !args.AttendanceName) {
+    if (!args.OrderFormID || !args.AttendanceID) {
         common.ReturnError(common.ErrorMap[1], response);
         return;
     }
@@ -27,8 +27,7 @@ function deleteOrderFormItem(data) {
             database = JSON.parse(recordset.Attendance);
 
         for (var i = 0; i < database.length; i++) {
-            if (args.AttendanceName === database[i].Name) {
-                if (args.ItemID === database[i].ItemID)
+            if (args.AttendanceID === database[i].AttendanceID) {
                     continue;                
             }
             dest.push(database[i]);
