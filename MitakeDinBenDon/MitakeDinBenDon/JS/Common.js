@@ -67,6 +67,16 @@ function b64DecodeUnicode(str) {
     }).join(''));
 }
 
+function generateGUID() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
+}
+
 function isStringEmpty(value) {
     if (value == null || value == undefined || value == "")
         return true;
@@ -107,7 +117,7 @@ function createProduceTable(storeID) {
         param: { StoreID: storeID },
         type: "GET",
         success: (args) => { onGetMenuSuccess(args) },
-        error: (args) => { onGetMenuError(args) }     
+        error: (args) => { onGetMenuError(args) }
     }
 
     query(api, parameter);
@@ -117,7 +127,7 @@ function onGetMenuSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
         var menu = args.Menu;
-        menu.Items = JSON.parse(b64DecodeUnicode(menu.Items));        
+        menu.Items = JSON.parse(b64DecodeUnicode(menu.Items));
         var table = document.getElementById("productTable");
 
         var tr = table.insertRow(0);
@@ -166,6 +176,7 @@ function getStoreByID(id, onGetStoreByIDSuccess, onGetStoreByIDError) {
 }
 
 function createStoreInfoTable(store) {
+    clearChild("informationTable");
     var table = document.getElementById("informationTable");
     for (var propertyName in store) {
         if (propertyName == "StoreID" || propertyName == "MenuID")

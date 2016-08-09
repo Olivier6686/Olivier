@@ -1,5 +1,6 @@
 ﻿var OrderForm;
 var StoreID;
+var Menu;
 
 function queryStoreInfo() {
     var url = window.location.search;
@@ -64,90 +65,69 @@ function onGetStoreByIDError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
-function createOrderTable() {
-    queryMenu(StoreID, onOrderTableSuccess, onError);
-}
-
 function createStatisticsTable() {
     queryMenu(StoreID, onStatisticsTableSuccess, onError);
 }
 
-function onOrderTableSuccess(args) {
-    if (args.IsSucceed) {
-        clearChild("productTable");
-        var menu = args.Menu;
-        menu.Items = JSON.parse(b64DecodeUnicode(menu.Items));
-        var table = document.getElementById("productTable");
-        var attendanceName = getLocalStorage("AttendanceName");
+function createOrderTable() {
+    clearChild("productTable");
+    var table = document.getElementById("productTable");
+    var attendanceName = getLocalStorage("AttendanceName");
+    document.getElementById("attendanceName").value = attendanceName;
 
-        document.getElementById("attendanceName").value = attendanceName;
+    var tr = table.insertRow(0);
+    td = tr.insertCell(0);
+    td.innerHTML = "Name"
+    td = tr.insertCell(1);
+    td.innerHTML = "Price";
+    td = tr.insertCell(2);
+    td.innerHTML = "Amount";
+    td = tr.insertCell(3);
+    td.innerHTML = "Description";
 
-        var tr = table.insertRow(0);
-        td = tr.insertCell(0);
-        td.innerHTML = "Name"
-        td = tr.insertCell(1);
-        td.innerHTML = "Price";
-        td = tr.insertCell(2);
-        td.innerHTML = "Amount";
-        td = tr.insertCell(3);
-        td.innerHTML = "Description";
-
-        for (var i = 0; i < menu.Items.length; i++) {
+    for (var i = 0; i < Menu.Items.length; i++) {
+        var num = table.rows.length;
+        var tr = table.insertRow(num);
+        var subCategory = Menu.Items[i];
+        td = tr.insertCell(tr.cells.length);
+        td.innerHTML = subCategory.SubTitle;
+        td.colSpan = 4;
+        td.className = "SubTitle";
+        for (var j = 0; j < subCategory.Items.length; j++) {
             var num = table.rows.length;
             var tr = table.insertRow(num);
-            var subCategory = menu.Items[i];
             td = tr.insertCell(tr.cells.length);
-            td.innerHTML = subCategory.SubTitle;
-            td.colSpan = 4;
-            td.className = "SubTitle";
-            for (var j = 0; j < subCategory.Items.length; j++) {
-                var num = table.rows.length;
-                var tr = table.insertRow(num);
-                td = tr.insertCell(tr.cells.length);
-                td.id = subCategory.Items[j].ItemID;
-                td.innerHTML = subCategory.Items[j].Name;
-                td = tr.insertCell(tr.cells.length);
+            td.id = subCategory.Items[j].ItemID;
+            td.innerHTML = subCategory.Items[j].Name;
+            td = tr.insertCell(tr.cells.length);
 
-                var detail = { amount: undefined, description: undefined, checkIndex: undefined };
-                var exist = getOrderItemByName(attendanceName, subCategory.Items[j].ItemID, detail);
-
-                var prices = subCategory.Items[j].Price.split(",");
-                for (var k = 0; k < prices.length; k++) {
-                    var price = prices[k].split(":");
-                    var num = price.length == 2 ? price[1] : price[0];
-                    var tail = '">';
-                    if (exist)
-                        tail = '" checked>';
-                    var genStr = '<input type="radio" id="' + k + '" name="price_' + subCategory.Items[j].ItemID + '"value="' + num + tail + prices[k];
-                    td.innerHTML += genStr;
-                }
-
-                var numInput = document.createElement("input");
-                numInput.type = "number";
-                numInput.min = 0;
-                numInput.name = "numInput";
-                numInput.onchange = onNumberChange;
-                if (exist)
-                    numInput.value = detail.amount;
-                td = tr.insertCell(tr.cells.length);
-                td.appendChild(numInput);
-
-                var text = document.createElement("input");
-                text.type = "text";
-                if (exist)
-                    text.value = detail.description;
-                td = tr.insertCell(tr.cells.length);
-                td.appendChild(text);
+            var prices = subCategory.Items[j].Price.split(",");
+            for (var k = 0; k < prices.length; k++) {
+                var price = prices[k].split(":");
+                var num = price.length == 2 ? price[1] : price[0];
+                var tail = '">';
+                var genStr = '<input type="radio" id="' + k + '" name="price_' + subCategory.Items[j].ItemID + '"value="' + num + tail + prices[k];
+                td.innerHTML += genStr;
             }
+
+            var numInput = document.createElement("input");
+            numInput.type = "number";
+            numInput.min = 0;
+            numInput.name = "numInput";
+            numInput.onchange = onNumberChange;
+            td = tr.insertCell(tr.cells.length);
+            td.appendChild(numInput);
+
+            var text = document.createElement("input");
+            text.type = "text";
+            td = tr.insertCell(tr.cells.length);
+            td.appendChild(text);
         }
-    }
-    else {
-        setWarningMsg(true, "Parameter error!");
     }
 }
 
-function onNumberChange(val) {
-    var num = val.currentTarget;
+function onNumberChange(e) {
+    var num = e.currentTarget;
     if (num.value == 0) {
         num.value = "";
         var td = num.parentNode; //num的parent為td
@@ -166,7 +146,8 @@ function onNumberChange(val) {
 function onStatisticsTableSuccess(args) {
     if (args.IsSucceed) {
         clearChild("productTable");
-        var menu = JSON.parse(b64DecodeUnicode(args.Menu.Items));
+        Menu = args.Menu;
+        Menu.Items = JSON.parse(b64DecodeUnicode(Menu.Items));
         var table = document.getElementById("productTable");
         if (!isStringEmpty(OrderForm.Attendance))
             OrderForm.Attendance = JSON.parse(OrderForm.Attendance);
@@ -186,15 +167,19 @@ function onStatisticsTableSuccess(args) {
             td.innerHTML = "Attendance"
             td = tr.insertCell(4);
             td.innerHTML = "Description";
+            td = tr.insertCell(5);
+            td.innerHTML = "Action";
 
             for (var i = 0; i < OrderForm.Attendance.length; i++) {
                 var detail = { name: undefined, price: undefined };
-                var exist = getOrderItem(menu, OrderForm.Attendance[i].ItemID, OrderForm.Attendance[i].CheckIndex, detail);
+                var exist = getOrderItem(Menu.Items, OrderForm.Attendance[i].ItemID, OrderForm.Attendance[i].CheckIndex, detail);
                 if (exist) {
                     var num = table.rows.length;
                     var tr = table.insertRow(num);
                     td = tr.insertCell(tr.cells.length);
                     td.innerHTML = detail.name;
+                    td.id = OrderForm.Attendance[i].ItemID;
+                    td.name = OrderForm.Attendance[i].AttendanceID;
                     td = tr.insertCell(tr.cells.length);
                     td.innerHTML = OrderForm.Attendance[i].Amount;
                     td = tr.insertCell(tr.cells.length);
@@ -203,6 +188,13 @@ function onStatisticsTableSuccess(args) {
                     td.innerHTML = OrderForm.Attendance[i].Name;
                     td = tr.insertCell(tr.cells.length);
                     td.innerHTML = OrderForm.Attendance[i].Description;
+
+                    td = tr.insertCell(tr.cells.length);
+                    var btn = document.createElement("button");
+                    btn.innerHTML = "Delete";
+                    btn.onclick = onDeleteClick;
+                    td.appendChild(btn);
+
                     total += calculateTotalPrice(OrderForm.Attendance[i].Amount, detail.price);
                 }
             }
@@ -211,7 +203,7 @@ function onStatisticsTableSuccess(args) {
             td = tr.insertCell(0);
             td.innerHTML = "Total"
             td = tr.insertCell(tr.cells.length);
-            td.colSpan = 4;
+            td.colSpan = 5;
             td.innerHTML = total;
         }
         else {
@@ -275,11 +267,11 @@ function onConfirmClick() {
         return;
     }
 
-    var atendance = createAttendanceToSend(name);
+    var attendance = createAttendanceToSend(name);
     setLocalStorage("AttendanceName", name);
     var api = ServerURL + "/UpateOrderFormAttendance";
     var parameter = {
-        param: { OrderFormID: OrderForm.OrderFormID, Attendance: atendance },
+        param: { OrderFormID: OrderForm.OrderFormID, Attendance: attendance },
         type: "POST",
         success: (args) => { onUpateOrderFormAttendanceSuccess(args) },
         error: (args) => { onUpateOrderFormAttendanceError(args) }
@@ -292,6 +284,7 @@ function createAttendanceToSend(name) {
     var table = document.getElementById("productTable");
     var nums = document.getElementsByName("numInput");
     var attendanceList = [];
+
     for (var i = 0; i < nums.length; i++) {
         var num = nums[i];
         if (num.value > 0) {
@@ -299,8 +292,9 @@ function createAttendanceToSend(name) {
             var tr = td.parentNode; //td的parent為tr
             var detail = { itemID: undefined, checkIndex: undefined };
             var exist = getCheckPriceID(tr.cells[1], detail); //找到了哪一個子項目被選取了
-            if (exist) {           
-                var attendance = { Name: name, ItemID: detail.itemID, CheckIndex: detail.checkIndex, Amount: tr.cells[2].childNodes[0].value, Description: tr.cells[3].childNodes[0].value }
+            if (exist) {
+                var id = generateGUID();
+                var attendance = { AttendanceID: id, Name: name, ItemID: detail.itemID, CheckIndex: detail.checkIndex, Amount: tr.cells[2].childNodes[0].value, Description: tr.cells[3].childNodes[0].value }
                 attendanceList.push(attendance);
             }
         }
@@ -324,7 +318,6 @@ function getCheckPriceID(td, detail) {
 function onUpateOrderFormAttendanceSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        //window.location.assign("OrderPage.html#");
         document.getElementById("attendanceDiv").style.display = "none";
         document.getElementById("emptyDiv").style.display = "block";
         getOrderFormsByID(OrderForm.OrderFormID);
@@ -336,4 +329,106 @@ function onUpateOrderFormAttendanceSuccess(args) {
 
 function onUpateOrderFormAttendanceError(args) {
     setWarningMsg(true, "Some errors occur");
+}
+
+function onDeleteClick(e) {
+    var btn = e.currentTarget;
+    var td = btn.parentNode; //num的parent為td
+    var tr = td.parentNode; //td的parent為tr
+
+    var itemID = tr.cells[0].id; //id裡面存放itemID
+    var attendanceID = tr.cells[0].name //name裡面存放attendanceID
+    var attendanceName = tr.cells[3].innerHTML;
+    var table = document.getElementById("productTable");
+    table.deleteRow(tr.rowIndex);
+
+    var api = ServerURL + "/DeleteOrderFormItem";
+    var parameter = {
+        param: { OrderFormID: OrderForm.OrderFormID, AttendanceID: attendanceID },
+        type: "POST",
+        success: (args) => { onDeleteSuccess(args) },
+        error: (args) => { onDeleteError(args) }
+    }
+
+    query(api, parameter);
+}
+
+function onDeleteSuccess(args) {
+    if (args.IsSucceed) {
+    }
+    else {
+        setWarningMsg(true, "User name or Password failed");
+    }
+}
+
+function onDeleteError(args) {
+    setWarningMsg(true, "Some errors occur");
+}
+
+//舊版的，會把有點過的產品加上去的，先不用他
+function createOrderTable2() {
+    clearChild("productTable");
+    var table = document.getElementById("productTable");
+    var attendanceName = getLocalStorage("AttendanceName");
+
+    document.getElementById("attendanceName").value = attendanceName;
+
+    var tr = table.insertRow(0);
+    td = tr.insertCell(0);
+    td.innerHTML = "Name"
+    td = tr.insertCell(1);
+    td.innerHTML = "Price";
+    td = tr.insertCell(2);
+    td.innerHTML = "Amount";
+    td = tr.insertCell(3);
+    td.innerHTML = "Description";
+
+    for (var i = 0; i < Menu.Items.length; i++) {
+        var num = table.rows.length;
+        var tr = table.insertRow(num);
+        var subCategory = Menu.Items[i];
+        td = tr.insertCell(tr.cells.length);
+        td.innerHTML = subCategory.SubTitle;
+        td.colSpan = 4;
+        td.className = "SubTitle";
+        for (var j = 0; j < subCategory.Items.length; j++) {
+            var num = table.rows.length;
+            var tr = table.insertRow(num);
+            td = tr.insertCell(tr.cells.length);
+            td.id = subCategory.Items[j].ItemID;
+            td.innerHTML = subCategory.Items[j].Name;
+            td = tr.insertCell(tr.cells.length);
+
+            var detail = { amount: undefined, description: undefined, checkIndex: undefined };
+            var exist = getOrderItemByName(attendanceName, subCategory.Items[j].ItemID, detail);
+
+            var prices = subCategory.Items[j].Price.split(",");
+            for (var k = 0; k < prices.length; k++) {
+                var price = prices[k].split(":");
+                var num = price.length == 2 ? price[1] : price[0];
+                var tail = '">';
+                if (exist)
+                    tail = '" checked>';
+                var genStr = '<input type="radio" id="' + k + '" name="price_' + subCategory.Items[j].ItemID + '"value="' + num + tail + prices[k];
+                td.innerHTML += genStr;
+            }
+
+            var numInput = document.createElement("input");
+            numInput.type = "number";
+            numInput.min = 0;
+            numInput.name = "numInput";
+            numInput.onchange = onNumberChange;
+            if (exist)
+                numInput.value = detail.amount;
+            td = tr.insertCell(tr.cells.length);
+            td.appendChild(numInput);
+
+            var text = document.createElement("input");
+            text.type = "text";
+            if (exist)
+                text.value = detail.description;
+            td = tr.insertCell(tr.cells.length);
+            td.appendChild(text);
+        }
+    }
 }
