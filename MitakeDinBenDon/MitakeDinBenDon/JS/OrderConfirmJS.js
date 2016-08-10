@@ -192,6 +192,7 @@ function onStatisticsTableSuccess(args) {
                     td = tr.insertCell(tr.cells.length);
                     var btn = document.createElement("button");
                     btn.innerHTML = "Delete";
+                    btn.style.width = "100%";
                     btn.onclick = onDeleteClick;
                     td.appendChild(btn);
 
