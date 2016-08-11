@@ -1,15 +1,5 @@
 ﻿var Modal, MapDiv;
 
-function setOngoingAnimation() {
-    var acc = document.getElementsByClassName("accordion");
-    for (var i = 0; i < acc.length; i++) {
-        acc[i].onclick = function () {
-            this.classList.toggle("active");
-            this.nextElementSibling.classList.toggle("show");
-        }
-    }
-}
-
 function getOrderItemByUserName() {
     var orderList = getSessionStorage("OrderList");
 
@@ -62,6 +52,16 @@ function onGetOrderFormError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
+function setOngoingAnimation() {
+    var acc = document.getElementsByClassName("accordion");
+    for (var i = 0; i < acc.length; i++) {
+        acc[i].onclick = function () {
+            this.classList.toggle("active");
+            this.nextElementSibling.classList.toggle("show");
+        }
+    }
+}
+
 function getItemNameByID(source, itemID) {
     for (var i = 0; i < source.length; i++) {
         var menu = source[i];
@@ -77,7 +77,7 @@ function getItemNameByID(source, itemID) {
 }
 
 function generateOngoingItem(title, item, detail, orderFormID) {
-    var div = document.getElementById("ongoingSection");
+    var div = document.getElementById("ongoingSection"); 
     var btn = document.createElement("button");
     btn.innerHTML = title;
     btn.className = "accordion";
@@ -110,16 +110,12 @@ function generateOngoingItem(title, item, detail, orderFormID) {
     div.appendChild(d);
 }
 
-function generateSearchItem(stores) {
-    var div = document.getElementById("searchSection");
-    for (var i = 0; i < stores.length; i++) {
-        var element = document.createElement("button");
-        element.data = JSON.stringify(stores[i]); //To storage store information
-        element.innerHTML = stores[i].StoreName;
-        element.onclick = onChipClick;
-        element.className = "chip";
-        element.type = "button";
-        div.appendChild(element);
+function onKeyPress() {
+    if (event.keyCode == 13) {
+        event.preventDefault();
+        clearChild("searchSection");
+        var keywords = $("#search_input").val();
+        searchStores(keywords);
     }
 }
 
@@ -149,12 +145,16 @@ function onSearchError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
-function onKeyPress() {
-    if (event.keyCode == 13) {
-        event.preventDefault();
-        clearChild("searchSection");
-        var keywords = document.getElementById("search_input").value;
-        searchStores(keywords);
+function generateSearchItem(stores) {
+    var div = document.getElementById("searchSection");
+    for (var i = 0; i < stores.length; i++) {
+        var element = document.createElement("button");
+        element.data = JSON.stringify(stores[i]); //To storage store information
+        element.innerHTML = stores[i].StoreName;
+        element.onclick = onChipClick;
+        element.className = "chip";
+        element.type = "button";
+        div.appendChild(element);
     }
 }
 
@@ -162,31 +162,30 @@ function onChipClick() {
     var btn = event.srcElement;
     if (!isStringEmpty(btn.data)) {
         var info = JSON.parse(btn.data);
-        document.getElementById("confirmBtn").value = info.StoreID;
+        $("#confirmBtn").val(info.StoreID);
         showMenuModal(info);
     }
 }
 
 function showMenuModal(store) {
-    document.getElementById("modalTitle").innerHTML = store.StoreName;
-    document.getElementById("modalAddress").innerHTML = store.Address;
-
+    $("#modalTitle").html(store.StoreName);
+    $("#modalAddress").html(store.Address);
     createProduceTable(store.StoreID);
     Modal = document.getElementById("modalForm");
     Modal.style.display = "block";
-    document.getElementById("outerBody").style.overflowY = "hidden";
+    $("#outerBody").css("overflowY", "hidden");
 }
 
 function onMenuCancelClick() {
-    Modal.style.display = "none";
-    document.getElementById("outerBody").style.overflowY = "scroll";
+    Modal.style.display = "none";   
+    $("#outerBody").css("overflowY", "scroll");
     clearChild("productTable");
 }
 
 window.onclick = function (event) {
     if (event.target == Modal) {
         Modal.style.display = "none";
-        document.getElementById("outerBody").style.overflowY = "scroll";
+        $("#outerBody").css("overflowY", "scroll");
         clearChild("productTable");
     }
 }
@@ -217,11 +216,41 @@ function openTab(event, methodName) {
 function initailMap() {
     if (navigator.geolocation) {
         if (MapDiv == undefined) {
-            var mapCanvas = document.getElementById("map");
-            var mapOptions = { center: new google.maps.LatLng(25.055297, 121.5272828), zoom: 14 }
-            MapDiv = new google.maps.Map(mapCanvas, mapOptions);
-            getStores();
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                console.log("Get current location success: " + position.coords.latitude + " @ " + position.coords.longitude);
+                setCenterMap(latLng);
+            }, function (error) {
+                var latLng = new google.maps.LatLng(25.055297, 121.5272828);
+                console.log("Get current location fail: " + "25.055297 @ 121.5272828");
+                setCenterMap(latLng);
+            })
+
+            //var mapCanvas = document.getElementById("map");
+            //var mapOptions = { center: new google.maps.LatLng(25.055297, 121.5272828), zoom: 14 }
+            //MapDiv = new google.maps.Map(mapCanvas, mapOptions);
+            //getStores();
         }
+    }
+}
+
+function setCenterMap(LatLng) {
+    var mapCanvas = document.getElementById("map");
+    //var mapOptions = { center: new google.maps.LatLng(25.055297, 121.5272828), zoom: 14 }
+    var mapOptions = { center: LatLng, zoom: 14 }
+    MapDiv = new google.maps.Map(mapCanvas, mapOptions);
+    getStores();
+}
+
+function getCurrentPosition() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            return position;
+        });
+    } else {
+        var position = new google.maps.position;
+        position.lat = 25.055297;
+        position.lng = 121.5272828;
     }
 }
 
@@ -244,7 +273,7 @@ function addMarker(store, geocoder) {
             marker.setMap(MapDiv);
             google.maps.event.addListener(marker, "click", function () {
                 var info = marker.data;
-                document.getElementById("confirmBtn").value = info.StoreID;
+                $("#confirmBtn").val(info.StoreID);
                 showMenuModal(info);
             });
         }

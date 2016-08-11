@@ -6,15 +6,13 @@ function queryStoreInfo() {
     var url = window.location.search;
     var id = getParameterByName("OrderFormID", url);
     getOrderFormsByID(id);
-    //var api = ServerURL + "/GetOrderFormsByID";
-    //var parameter = {
-    //    param: { OrderFormIDs: id },
-    //    type: "GET",
-    //    success: (args) => { onGetOrderFormSuccess(args) },
-    //    error: (args) => { onGetOrderFormError(args) }
-    //}
+}
 
-    //query(api, parameter);
+function getParameters() {
+    $("#titleSpan").html(OrderForm.Title);
+    $("#descriptionSpan").html(OrderForm.Description);
+    $("#expiredTimeSpan").html(OrderForm.ExpiredTime);
+    StoreID = OrderForm.StoreID;
 }
 
 function getOrderFormsByID(id) {
@@ -27,13 +25,6 @@ function getOrderFormsByID(id) {
     }
 
     query(api, parameter);
-}
-
-function getParameters() {
-    document.getElementById("titleSpan").innerHTML = OrderForm.Title;
-    document.getElementById("descriptionSpan").innerHTML = OrderForm.Description;
-    document.getElementById("expiredTimeSpan").innerHTML = OrderForm.ExpiredTime;
-    StoreID = OrderForm.StoreID;
 }
 
 function onGetOrderFormSuccess(args) {
@@ -66,7 +57,7 @@ function onGetStoreByIDError(args) {
 }
 
 function createStatisticsTable() {
-    queryMenu(StoreID, onStatisticsTableSuccess, onError);
+    queryMenu(StoreID, onStatisticsTableSuccess, onStatisticsTableError);
 }
 
 function createOrderTable() {
@@ -216,7 +207,7 @@ function onStatisticsTableSuccess(args) {
     }
 }
 
-function onError(args) {
+function onStatisticsTableError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
@@ -254,14 +245,14 @@ function calculateTotalPrice(amount, price) {
 }
 
 function onOrderClick() {
-    document.getElementById("attendanceDiv").style.display = "block";
-    document.getElementById("emptyDiv").style.display = "none";
+    $("#attendanceDiv").css("display", "block");
+    $("#emptyDiv").css("display", "none");
     createOrderTable()
 }
 
 function onConfirmClick() {
     setWarningMsg(false, "");
-    var name = document.getElementById("attendanceName").value;
+    var name = $("#attendanceName").val();
 
     if (isStringEmpty(name)) {
         setWarningMsg(true, "Please fill attendance name");
@@ -319,8 +310,8 @@ function getCheckPriceID(td, detail) {
 function onUpateOrderFormAttendanceSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        document.getElementById("attendanceDiv").style.display = "none";
-        document.getElementById("emptyDiv").style.display = "block";
+        $("#attendanceDiv").css("display", "none");
+        $("#emptyDiv").css("display", "block");
         getOrderFormsByID(OrderForm.OrderFormID);
     }
     else {

@@ -4,8 +4,6 @@ function queryStoreInfo() {
     var url = window.location.search;
     StoreID = getParameterByName("StoreID", url);
     getStoreByID(StoreID, onGetStoreByIDSuccess, onGetStoreByIDError);
-    //var storeJson = getSessionStorage("StoreInfo");
-    //var store = JSON.parse(storeJson);
 }
 
 function onGetStoreByIDSuccess(args) {
@@ -60,10 +58,9 @@ function showMap(name, address) {
 }
 
 function onConfirmClick() {
-    setWarningMsg(false, "");   
-
-    var title = document.getElementById("titleInput").value;
-    var des = document.getElementById("desInput").value;
+    setWarningMsg(false, "");
+    var title = $("#titleInput").val();
+    var des = $("#desInput").val();
     var datetime = document.getElementById("expiredTimeInput");
     var time = datetime.value;
 
@@ -79,7 +76,7 @@ function onConfirmClick() {
         setWarningMsg(true, "Please select a valid date");
         return;
     }
-    
+
     var owner = getSessionStorage("UserName");
 
     if (isStringEmpty(owner)) {
@@ -91,7 +88,6 @@ function onConfirmClick() {
     var api = ServerURL + "/EstablishOrder";
     var parameter = {
         param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: normalizeTime, Attendance: "" },
-        //param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: inputDate, Attendance: "" },
         type: "POST",
         success: (args) => { onCreateSuccess(args) },
         error: (args) => { onCreateError(args) }
@@ -102,8 +98,7 @@ function onConfirmClick() {
 
 function onCreateSuccess(args) {
     if (args.IsSucceed) {
-        modal = document.getElementById("modalDiv");
-        modal.style.display = "block";
+        $("#modalDiv").css("display", "block");
         updateOrderList(args.OrderForm);
     }
     else {
@@ -115,34 +110,18 @@ function onCreateError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
-function onCopyClick() {
-    var element = document.getElementById("copyArea");
-    var range = document.createRange();
-    range.selectNode(element);
-    window.getSelection().addRange(range);
-
-    try {
-        var successful = document.execCommand("copy");
-    } catch (e) {
-        console.log("Copy Fail: " + e);
-    }
-    finally {
-        window.getSelection().removeAllRanges();
-    }
-}
-
 function onHomeClick() {
     window.location.assign("OrderPage.html");
 }
 
 function updateOrderList(GUID) {
-    var guid = {OrderFormID: GUID};
+    var guid = { OrderFormID: GUID };
     var orderList = getSessionStorage("OrderList");
 
     var list;
     if (isStringEmpty(orderList)) {
         guid = [guid];
-        list = JSON.stringify(guid);      
+        list = JSON.stringify(guid);
     }
     else {
         list = JSON.parse(orderList);
