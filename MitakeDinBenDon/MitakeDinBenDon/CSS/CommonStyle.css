@@ -17,6 +17,15 @@ html * {
     background-size: cover;
 }
 
+button {
+    color: #777777;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+}
+
 .input{
     width: 100%;
     padding: 12px 20px;

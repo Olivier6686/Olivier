@@ -225,18 +225,12 @@ function initailMap() {
                 console.log("Get current location fail: " + "25.055297 @ 121.5272828");
                 setCenterMap(latLng);
             })
-
-            //var mapCanvas = document.getElementById("map");
-            //var mapOptions = { center: new google.maps.LatLng(25.055297, 121.5272828), zoom: 14 }
-            //MapDiv = new google.maps.Map(mapCanvas, mapOptions);
-            //getStores();
         }
     }
 }
 
 function setCenterMap(LatLng) {
     var mapCanvas = document.getElementById("map");
-    //var mapOptions = { center: new google.maps.LatLng(25.055297, 121.5272828), zoom: 14 }
     var mapOptions = { center: LatLng, zoom: 14 }
     MapDiv = new google.maps.Map(mapCanvas, mapOptions);
     getStores();

@@ -46,15 +46,28 @@ function test() {
 function showMap(name, address) {
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ "address": address }, function (results, status) {
-        var location = results[0].geometry.location;
-        var mapCanvas = document.getElementById("map");
-        var storeLatlng = new google.maps.LatLng(location.lat(), location.lng());
-        var mapOptions = { center: storeLatlng, zoom: 16 }
-        var map = new google.maps.Map(mapCanvas, mapOptions);
+        if (status == google.maps.GeocoderStatus.OK) {
+            var location = results[0].geometry.location;
+            //var postalCode = getPostalCode(results[0]);
+            var mapCanvas = document.getElementById("map");
+            var storeLatlng = new google.maps.LatLng(location.lat(), location.lng());
+            var mapOptions = { center: storeLatlng, zoom: 16 }
+            var map = new google.maps.Map(mapCanvas, mapOptions);
 
-        var marker = new google.maps.Marker({ position: storeLatlng, title: name });
-        marker.setMap(map);
+            var marker = new google.maps.Marker({ position: storeLatlng, title: name });
+            marker.setMap(map);
+        }
     });
+}
+
+function getPostalCode(locationObject) {
+    var postalCode = undefined;
+    for (var i = 0; i < locationObject.address_components.length; i++) {
+        if (locationObject.address_components[i].types[0] == "postal_code") {
+            postalCode = locationObject.address_components[i].long_name;
+        }
+    }
+    return postalCode;
 }
 
 function onConfirmClick() {
