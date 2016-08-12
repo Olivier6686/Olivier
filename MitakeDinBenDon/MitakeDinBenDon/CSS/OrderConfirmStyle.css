@@ -12,3 +12,14 @@ input.copyImage {
     transition: 0.1s ease-in-out;
     opacity: 0;
 }
+
+.LinkButton {
+    font-size:16px;
+    background-color: #eeeeee;
+    color: #777777;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
