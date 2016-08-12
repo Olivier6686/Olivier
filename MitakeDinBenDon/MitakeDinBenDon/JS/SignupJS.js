@@ -5,37 +5,43 @@
     document.getElementById("num2").innerHTML = number2;
 }
 
-function onCancelClick() {
-    document.forms["accountForm"]["realname"].value = "";
-    document.forms["accountForm"]["username"].value = "";
-    document.forms["accountForm"]["psw"].value = "";
-    document.forms["accountForm"]["re_psw"].value = "";
-    document.forms["accountForm"]["sum"].value = "";
-}
+function onConfirmClick() {
+    var realName = document.getElementById("realname").value;
+    var userName = document.getElementById("username").value;
+    var psw = document.getElementById("psw").value;
+    var rpsw = document.getElementById("re_psw").value;
+    var sum = parseInt(document.getElementById("sum").value, 10);
 
-function createAccount() {
-    if (checkSum() && checkReenterPassword()) {
-        document.forms["accountForm"].submit();
+    if (checkSum(sum) && checkPassword(psw, rpsw)) {
+        //TODO: Send telegram to server;
+        setWarningMsg(false, "");
     }
 }
 
-function checkSum() {
+function onCancelClick() {
+    document.getElementById("realname").value = "";
+    document.getElementById("username").value = "";
+    document.getElementById("psw").value = "";
+    document.getElementById("re_psw").value = "";   
+    document.getElementById("sum").value = "";
+}
+
+function checkSum(sum) {
     var num1 = parseInt(document.getElementById("num1").innerHTML, 10);
     var num2 = parseInt(document.getElementById("num2").innerHTML, 10);
-
-    var s = document.getElementsByName("sum").value;
-    var sum = parseInt(document.forms["accountForm"]["sum"].value, 10);
+    
 
     if ((num1 + num2) == sum)
         return true;
+
+    setWarningMsg(true, "The Answer is incorrect");
     return false;
 }
 
-function checkReenterPassword() {
-    var psw = document.forms["accountForm"]["psw"].value;
-    var rpsw = document.forms["accountForm"]["re_psw"].value;
-
+function checkPassword(psw, rpsw) {
     if (psw == rpsw)
         return true;
+
+    setWarningMsg(true, "Please enter correct password again");
     return false;
 }
