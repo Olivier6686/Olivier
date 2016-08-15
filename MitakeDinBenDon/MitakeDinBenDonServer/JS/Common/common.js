@@ -4,10 +4,10 @@ var connection = require('../Common/connection.js')
 var passwordError = { 'name': 'PasswordError', 'message': 'Password is wrong.', 'code': '0' };
 var parameterInputError = {'name':'parameterInputError', 'message':'parameter is error.', 'code':'1'};
 var NotFoundDataError = {'name':'NotFoundDataError', 'message':'Data not found.', 'code':'2'};
+var NotEmptyAccount = { 'name': 'NotEmptyAccount', 'message': 'Account had been register', 'code': '3' };
 
 
-
-var ErrorMap = [passwordError, parameterInputError, NotFoundDataError];
+var ErrorMap = [passwordError, parameterInputError, NotFoundDataError, NotEmptyAccount];
 
 function ReturnError(err, response) {
     var error = {"IsSucceed":false};
@@ -51,6 +51,38 @@ function getAccount(data, callback)
 	});
 }
 
+function getAccountNotResponse(data, callback) {
+    var username = data.Username;
+    var response = data.response;
+
+    var sqlRequest = new sql.Request(connection);
+    sqlRequest.input('username', username);
+    var query = 'select * from Account where UserName=@username';
+
+    sqlRequest.query(query).then(function (recordset) {
+        // ... error checks
+        if (recordset.length === 0) {
+            if (typeof (callback) === 'function')
+                callback(undefined, undefined);
+            return;
+        }
+
+        console.dir(recordset);
+
+        if (recordset[0]) {
+            if (typeof (callback) === 'function') {
+                callback(undefined, recordset[0]);
+                return;
+            }
+        }
+
+    }).catch(function (err) {
+        if (typeof (callback) === 'function')
+            callback(err, undefined);
+        return;
+    });
+}
+
 function getOrder(id, callback) {
     var sqlRequest = new sql.Request(connection);
     sqlRequest.input('id', id);
@@ -85,8 +117,19 @@ function updateAttendance(response, id, attendance) {
     });
 }
 
+function SendSucceed(response)
+{
+    var ret = { IsSucceed: true };
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+    var json = JSON.stringify(ret);
+    response.write(json);
+    response.end();
+}
+
 exports.ReturnError = ReturnError;
 exports.ErrorMap = ErrorMap;
 
 exports.getOrder = getOrder;
 exports.updateAttendance = updateAttendance;
+exports.sendSucceed = SendSucceed;
+exports.getAccountNotResponse = getAccountNotResponse;

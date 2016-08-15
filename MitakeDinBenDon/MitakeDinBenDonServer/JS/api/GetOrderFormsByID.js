@@ -39,7 +39,7 @@ function getOrderFormsByID(data) {
     }
 
     var idArray = args.OrderFormIDs.split(',');
-    if (idArray === null || idArray === 'undefined') {
+    if (idArray === null || idArray === undefined) {
         common.ReturnError(common.ErrorMap[1], response);
         return;
     }

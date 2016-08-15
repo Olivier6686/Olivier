@@ -7,6 +7,9 @@ var upateOrderFormAttendance = require('./api/UpateOrderFormAttendance.js');
 var getStores = require('./api/GetStores.js');
 var getStoreByID = require('./api/GetStoreByID.js');
 var deleteOrderFormItem = require('./api/DeleteOrderFormItem.js');
+var createAccount = require('./api/createAccount.js');
+var createStore = require('./api/CreateStore.js');
+
 
 exports.Login = login.login;
 exports.GetStoresByName = getStoresByName.GetStoresByName;
@@ -17,3 +20,5 @@ exports.UpateOrderFormAttendance = upateOrderFormAttendance.UpateOrderFormAttend
 exports.GetStores = getStores.GetStores;
 exports.GetStoreByID = getStoreByID.GetStoreByID;
 exports.DeleteOrderFormItem = deleteOrderFormItem.DeleteOrderFormItem;
+exports.CreateAccount = createAccount.CreateAccount;
+exports.CreateStore = createStore.CreateStore;

@@ -16,7 +16,7 @@ function updateOrderList(data, callback)
     getAccount.getAccount(data, function(account){
         var newOrderList = "";
         if (account) {
-            if (account.OrderList !== null && account.OrderList !== 'undefined') {
+            if (account.OrderList !== null && account.OrderList !== undefined) {
                 if (account.OrderList === "") {
                     newOrderList = "[{" + "\"OrderFormID\":\"" + OrderGuid  + "\"}]";
                 }
