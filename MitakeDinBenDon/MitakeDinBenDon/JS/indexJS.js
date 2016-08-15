@@ -1,6 +1,6 @@
 ﻿function sendLoginPost() {
-    var name = document.getElementById("username").value;
-    var psw = document.getElementById("psw").value;
+    var name = $("#username").val();
+    var psw = $("#psw").val();
 
     if (isStringEmpty(name) || isStringEmpty(psw))
         setWarningMsg(true, "Please fill user name and password");
@@ -14,38 +14,15 @@
     }
 
     query(api, parameter);
-
-    //$.ajax({
-    //    url: "http://10.1.4.133:8888/login",
-    //    data: { UserName: name, Password: psw },
-    //    type: "POST",
-    //    dataType: "json",
-
-    //    success: function (data, textStatus) {
-    //        if (data.IsSucceed) {
-    //            setWarningMsg(false, "");
-    //            setSessionStorage("UserName", data.UserName);
-    //            setSessionStorage("OrderList", data.OrderList);
-    //            window.location.assign("HTML/OrderPage.html");
-    //        }
-    //        else {
-    //            setWarningMsg(true, "User name or Password failed");
-    //        }
-    //    },
-
-    //    error: function (xhr, ajaxOptions, thrownError) {
-    //        setWarningMsg(true, thrownError);
-    //    }
-    //});
 }
 
 function onCancelClick() {
-    document.forms["accountForm"]["username"].value = "";
-    document.forms["accountForm"]["psw"].value = "";
+    $("#username").val("");
+    $("#psw").val("");
 }
 
 function onLoginSuccess(args) {
-    if (args.IsSucceed) {        
+    if (args.IsSucceed) {
         setWarningMsg(false, "");
         setSessionStorage("UserName", args.UserName);
         var decodedOrderList = atob(args.OrderList);

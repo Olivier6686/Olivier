@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../CSS/CommonStyle.css">
     <link rel="stylesheet" href="../CSS/indexStyle.css">
     <link rel="icon" href="../Images/icon.png">
+    <script src="../JS/Common.js"></script>
     <script src="../JS/SignupJS.js"></script>
     <meta charset="utf-8" />
     <title>Tasty</title>
@@ -19,24 +20,25 @@
     <div class="container" style="width:30%;margin:0 auto">
 
         <span><b>Real Name</b></span>
-        <input class="input" type="text" placeholder="Enter Real Name" name="realname" required />
+        <input id="realname" class="input" type="text" placeholder="Enter Real Name" required />
 
         <span><b>Username</b></span>
-        <input class="input" type="text" placeholder="Enter Username" name="username" required />
+        <input id="username" class="input" type="text" placeholder="Enter Username" required />
 
         <span><b>Password</b></span>
-        <input class="input" type="password" placeholder="Enter Password" name="psw" required />
+        <input id="psw" class="input" type="password" placeholder="Enter Password" required />
 
         <span><b>Enter Password Again</b></span>
-        <input class="input" type="password" placeholder="Enter Password Again" name="re_psw" required />
+        <input id="re_psw" class="input" type="password" placeholder="Enter Password Again" required />
 
         <span><b>Answer it: </b></span>
         <span id="num1"></span> <span> + </span> <span id="num2"></span> <span> = </span>
-        <input class="input" type="number" name="sum" placeholder="Enter number" required />
+        <input id="sum" class="input" type="number" placeholder="Enter number" required />
 
         <div>
-            <button type="submit" style="background-color:#90EE90;">Ok</button>
-            <button type="button" onclick="onCancelClick()" style="background-color:#FFA07A;float:right;">Cancel</button>
+            <button style="background-color:#90EE90;" onclick="onConfirmClick()">Confirm</button>
+            <button onclick="onCancelClick()" style="background-color:#FFA07A;float:right;">Cancel</button>
+            <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
         </div>
     </div>
 

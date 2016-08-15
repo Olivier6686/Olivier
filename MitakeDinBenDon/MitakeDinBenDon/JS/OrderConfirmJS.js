@@ -6,15 +6,13 @@ function queryStoreInfo() {
     var url = window.location.search;
     var id = getParameterByName("OrderFormID", url);
     getOrderFormsByID(id);
-    //var api = ServerURL + "/GetOrderFormsByID";
-    //var parameter = {
-    //    param: { OrderFormIDs: id },
-    //    type: "GET",
-    //    success: (args) => { onGetOrderFormSuccess(args) },
-    //    error: (args) => { onGetOrderFormError(args) }
-    //}
+}
 
-    //query(api, parameter);
+function getParameters() {
+    $("#titleSpan").html(OrderForm.Title);
+    $("#descriptionSpan").html(OrderForm.Description);
+    $("#expiredTimeSpan").html(OrderForm.ExpiredTime);
+    StoreID = OrderForm.StoreID;
 }
 
 function getOrderFormsByID(id) {
@@ -27,13 +25,6 @@ function getOrderFormsByID(id) {
     }
 
     query(api, parameter);
-}
-
-function getParameters() {
-    document.getElementById("titleSpan").innerHTML = OrderForm.Title;
-    document.getElementById("descriptionSpan").innerHTML = OrderForm.Description;
-    document.getElementById("expiredTimeSpan").innerHTML = OrderForm.ExpiredTime;
-    StoreID = OrderForm.StoreID;
 }
 
 function onGetOrderFormSuccess(args) {
@@ -66,7 +57,7 @@ function onGetStoreByIDError(args) {
 }
 
 function createStatisticsTable() {
-    queryMenu(StoreID, onStatisticsTableSuccess, onError);
+    queryMenu(StoreID, onStatisticsTableSuccess, onStatisticsTableError);
 }
 
 function createOrderTable() {
@@ -103,8 +94,9 @@ function createOrderTable() {
 
             var prices = subCategory.Items[j].Price.split(",");
             for (var k = 0; k < prices.length; k++) {
-                var price = prices[k].split(":");
-                var num = price.length == 2 ? price[1] : price[0];
+                var num = getPrice(prices[k]);
+                //var price = prices[k].split(":");
+                //var num = price.length == 2 ? price[1] : price[0];
                 var tail = '">';
                 var genStr = '<input type="radio" id="' + k + '" name="price_' + subCategory.Items[j].ItemID + '"value="' + num + tail + prices[k];
                 td.innerHTML += genStr;
@@ -124,6 +116,12 @@ function createOrderTable() {
             td.appendChild(text);
         }
     }
+}
+
+function getPrice(price) {
+    var result = price.split(":");
+    var num = result.length == 2 ? result[1] : result[0];
+    return num;
 }
 
 function onNumberChange(e) {
@@ -216,7 +214,7 @@ function onStatisticsTableSuccess(args) {
     }
 }
 
-function onError(args) {
+function onStatisticsTableError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
@@ -247,21 +245,22 @@ function getOrderItem(menu, itemID, checkIndex, detail) {
 }
 
 function calculateTotalPrice(amount, price) {
-    var itemPrice = price.split(":");
-    var num = itemPrice.length == 2 ? itemPrice[1] : itemPrice[0];
+    var num = getPrice(price);
+    //var itemPrice = price.split(":");
+    //var num = itemPrice.length == 2 ? itemPrice[1] : itemPrice[0];
     var total = parseInt(amount, 10) * parseInt(num, 10);
     return total;
 }
 
 function onOrderClick() {
-    document.getElementById("attendanceDiv").style.display = "block";
-    document.getElementById("emptyDiv").style.display = "none";
+    $("#attendanceDiv").css("display", "block");
+    $("#emptyDiv").css("display", "none");
     createOrderTable()
 }
 
 function onConfirmClick() {
     setWarningMsg(false, "");
-    var name = document.getElementById("attendanceName").value;
+    var name = $("#attendanceName").val();
 
     if (isStringEmpty(name)) {
         setWarningMsg(true, "Please fill attendance name");
@@ -319,8 +318,8 @@ function getCheckPriceID(td, detail) {
 function onUpateOrderFormAttendanceSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        document.getElementById("attendanceDiv").style.display = "none";
-        document.getElementById("emptyDiv").style.display = "block";
+        $("#attendanceDiv").css("display", "none");
+        $("#emptyDiv").css("display", "block");
         getOrderFormsByID(OrderForm.OrderFormID);
     }
     else {
@@ -364,6 +363,106 @@ function onDeleteSuccess(args) {
 
 function onDeleteError(args) {
     setWarningMsg(true, "Some errors occur");
+}
+
+function tableToJson() {
+    var table = document.getElementById("productTable");
+    var items = [];
+    var total = 0;
+    var totalAmount = 0;
+
+    for (var i = 1; i < table.rows.length - 1; i++) {
+        var row = table.rows[i];
+        var name = row.cells[0].innerHTML;
+        var amount = row.cells[1].innerHTML;
+        totalAmount += parseInt(amount, 10);
+
+        var price = row.cells[2].innerHTML;
+        var num = getPrice(price);
+        total += (parseInt(num, 10) * parseInt(amount, 10));
+
+        var attendance = row.cells[3].innerHTML;
+        var description = isStringEmpty(row.cells[4].innerHTML) ? "" : row.cells[4].innerHTML;
+        var item = { Name: name, Amount: amount, Price: price, Attendance: attendance, Description: description }
+        items.push(item);
+    }
+    var total = { Name: "Total", Amount: totalAmount, Price: total, Attendance: "", Description: "" }
+    items.push(total);
+    return items;
+}
+
+function getType() {
+    return types = {
+        "Name": "String",
+        "Amount": "String",
+        "Price": "String",
+        "Attendance": "String",
+        "Description": "String"
+    };
+}
+
+function emitXmlHeader() {
+    var headerRow = '<ss:Row>\n';
+    var type = getType();
+    for (var colName in type) {
+        headerRow += '  <ss:Cell>\n';
+        headerRow += '    <ss:Data ss:Type="String">';
+        headerRow += colName + '</ss:Data>\n';
+        headerRow += '  </ss:Cell>\n';
+    }
+    headerRow += '</ss:Row>\n';
+    return '<?xml version="1.0"?>\n' +
+           '<ss:Workbook xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n' +
+           '<ss:Worksheet ss:Name="Sheet1">\n' +
+           '<ss:Table>\n\n' + headerRow;
+};
+
+function emitXmlFooter() {
+    return '\n</ss:Table>\n' +
+           '</ss:Worksheet>\n' +
+           '</ss:Workbook>\n';
+};
+
+function jsonToSsXml(jsonObject) {
+    var row;
+    var col;
+    var xml;
+    var data = typeof jsonObject != "object" ? JSON.parse(jsonObject) : jsonObject;
+
+    xml = emitXmlHeader();
+
+    var type = getType();
+    for (row = 0; row < data.length; row++) {
+        xml += '<ss:Row>\n';
+
+        for (col in data[row]) {
+            xml += '  <ss:Cell>\n';
+            xml += '    <ss:Data ss:Type="' + type[col] + '">';
+            xml += data[row][col] + '</ss:Data>\n';
+            xml += '  </ss:Cell>\n';
+        }
+
+        xml += '</ss:Row>\n';
+    }
+
+    xml += emitXmlFooter();
+    return xml;
+};
+
+function download(content, filename, contentType) {
+    if (!contentType) contentType = 'application/octet-stream';
+    var a = document.getElementById('exportLink');
+    var blob = new Blob([content], {
+        'type': contentType
+    });
+    a.href = window.URL.createObjectURL(blob);
+    a.download = filename;
+};
+
+function onExportClick() {
+    var tableJson = tableToJson();
+    var fileName = "Statistic_" + OrderForm.Title + ".xls";
+    download(jsonToSsXml(tableJson), fileName, 'application/vnd.ms-excel');
 }
 
 //舊版的，會把有點過的產品加上去的，先不用他

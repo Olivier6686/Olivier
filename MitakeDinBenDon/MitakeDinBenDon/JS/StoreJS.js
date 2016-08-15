@@ -4,8 +4,6 @@ function queryStoreInfo() {
     var url = window.location.search;
     StoreID = getParameterByName("StoreID", url);
     getStoreByID(StoreID, onGetStoreByIDSuccess, onGetStoreByIDError);
-    //var storeJson = getSessionStorage("StoreInfo");
-    //var store = JSON.parse(storeJson);
 }
 
 function onGetStoreByIDSuccess(args) {
@@ -48,22 +46,34 @@ function test() {
 function showMap(name, address) {
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({ "address": address }, function (results, status) {
-        var location = results[0].geometry.location;
-        var mapCanvas = document.getElementById("map");
-        var storeLatlng = new google.maps.LatLng(location.lat(), location.lng());
-        var mapOptions = { center: storeLatlng, zoom: 16 }
-        var map = new google.maps.Map(mapCanvas, mapOptions);
+        if (status == google.maps.GeocoderStatus.OK) {
+            var location = results[0].geometry.location;
+            //var postalCode = getPostalCode(results[0]);
+            var mapCanvas = document.getElementById("map");
+            var storeLatlng = new google.maps.LatLng(location.lat(), location.lng());
+            var mapOptions = { center: storeLatlng, zoom: 16 }
+            var map = new google.maps.Map(mapCanvas, mapOptions);
 
-        var marker = new google.maps.Marker({ position: storeLatlng, title: name });
-        marker.setMap(map);
+            var marker = new google.maps.Marker({ position: storeLatlng, title: name });
+            marker.setMap(map);
+        }
     });
 }
 
-function onConfirmClick() {
-    setWarningMsg(false, "");   
+function getPostalCode(locationObject) {
+    var postalCode = undefined;
+    for (var i = 0; i < locationObject.address_components.length; i++) {
+        if (locationObject.address_components[i].types[0] == "postal_code") {
+            postalCode = locationObject.address_components[i].long_name;
+        }
+    }
+    return postalCode;
+}
 
-    var title = document.getElementById("titleInput").value;
-    var des = document.getElementById("desInput").value;
+function onConfirmClick() {
+    setWarningMsg(false, "");
+    var title = $("#titleInput").val();
+    var des = $("#desInput").val();
     var datetime = document.getElementById("expiredTimeInput");
     var time = datetime.value;
 
@@ -79,7 +89,7 @@ function onConfirmClick() {
         setWarningMsg(true, "Please select a valid date");
         return;
     }
-    
+
     var owner = getSessionStorage("UserName");
 
     if (isStringEmpty(owner)) {
@@ -91,7 +101,6 @@ function onConfirmClick() {
     var api = ServerURL + "/EstablishOrder";
     var parameter = {
         param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: normalizeTime, Attendance: "" },
-        //param: { StoreID: StoreID, Owner: owner, Title: title, Description: des, ExpiredTime: inputDate, Attendance: "" },
         type: "POST",
         success: (args) => { onCreateSuccess(args) },
         error: (args) => { onCreateError(args) }
@@ -102,8 +111,7 @@ function onConfirmClick() {
 
 function onCreateSuccess(args) {
     if (args.IsSucceed) {
-        modal = document.getElementById("modalDiv");
-        modal.style.display = "block";
+        $("#modalDiv").css("display", "block");
         updateOrderList(args.OrderForm);
     }
     else {
@@ -115,34 +123,18 @@ function onCreateError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
-function onCopyClick() {
-    var element = document.getElementById("copyArea");
-    var range = document.createRange();
-    range.selectNode(element);
-    window.getSelection().addRange(range);
-
-    try {
-        var successful = document.execCommand("copy");
-    } catch (e) {
-        console.log("Copy Fail: " + e);
-    }
-    finally {
-        window.getSelection().removeAllRanges();
-    }
-}
-
 function onHomeClick() {
     window.location.assign("OrderPage.html");
 }
 
 function updateOrderList(GUID) {
-    var guid = {OrderFormID: GUID};
+    var guid = { OrderFormID: GUID };
     var orderList = getSessionStorage("OrderList");
 
     var list;
     if (isStringEmpty(orderList)) {
         guid = [guid];
-        list = JSON.stringify(guid);      
+        list = JSON.stringify(guid);
     }
     else {
         list = JSON.parse(orderList);

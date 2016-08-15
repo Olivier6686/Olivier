@@ -22,15 +22,6 @@
     padding: 16px;
 }
 
-button {
-    color: #777777;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 40%;
-}
-
 ul.topnav {
     list-style-type: none;
     margin: 0;
