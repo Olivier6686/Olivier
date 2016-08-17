@@ -9,7 +9,7 @@ var getStoreByID = require('./api/GetStoreByID.js');
 var deleteOrderFormItem = require('./api/DeleteOrderFormItem.js');
 var createAccount = require('./api/createAccount.js');
 var createStore = require('./api/CreateStore.js');
-
+var createMenu = require('./api/CreateMenu.js');
 
 exports.Login = login.login;
 exports.GetStoresByName = getStoresByName.GetStoresByName;
@@ -22,3 +22,4 @@ exports.GetStoreByID = getStoreByID.GetStoreByID;
 exports.DeleteOrderFormItem = deleteOrderFormItem.DeleteOrderFormItem;
 exports.CreateAccount = createAccount.CreateAccount;
 exports.CreateStore = createStore.CreateStore;
+exports.CreateMenu = createMenu.CreateMenu;

@@ -4,6 +4,8 @@ var requestHandlers = require("./js/requestHandlers");
 var url = require("url");
 var querystring = require('querystring');
 var express = require('express');
+var session = require('express-session');
+
 var app = express();
 var pathname = __dirname;
 var port = 8888;
@@ -21,6 +23,7 @@ handle["/GetStoreByID"] = requestHandlers.GetStoreByID;
 handle["/DeleteOrderFormItem"] = requestHandlers.DeleteOrderFormItem;
 handle["/CreateAccount"] = requestHandlers.CreateAccount;
 handle["/CreateStore"] = requestHandlers.CreateStore;
+handle["/CreateMenu"] = requestHandlers.CreateMenu;
 
 app.use('/Main', express.static(pathname.replace('MitakeDinBenDonServer', 'MitakeDinBenDon')));
 
@@ -63,6 +66,24 @@ var myParamter = function (req, res, next) {
 
 app.use(myParamter);
 
+app.use(session({
+    secret: 'HsiwGsswdddkUATdfded',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 * 60 * 10 },
+    data: {}
+}));
+
+
+
+function isAuthenticated(req, res, next) {
+    sess = req.session;
+    var ID = req.session.data;
+    if (req.session.data)
+        return next();
+    res.redirect(redirect);
+
+}
 
 app.get('/', function (req, res) {    
     res.writeHead(301,
@@ -76,59 +97,64 @@ app.post('/login', function (req, res) {
     handle["/login"](data);
 });
 
-app.get('/GetStoresByName', function (req, res) {    
+app.get('/GetStoresByName', isAuthenticated, function (req, res) {    
     var data = req.data;
     handle["/GetStoresByName"](data);
 });
 
-app.get('/GetMenuByStoreID', function (req, res) {    
+app.get('/GetMenuByStoreID', isAuthenticated, function (req, res) {    
     var data = req.data;
     handle["/GetMenuByStoreID"](data);
 });
 
-app.post('/EstablishOrder', function (req, res) {
+app.post('/EstablishOrder', isAuthenticated, function (req, res) {
     var data = req.data;
     handle["/EstablishOrder"](data);
 });
 
-app.get('/GetOrderFormsByID', function (req, res) {    
+app.get('/GetOrderFormsByID', isAuthenticated, function (req, res) {    
     var data = req.data;
     handle["/GetOrderFormsByID"](data);
 });
 
-app.post('/UpateOrderFormAttendance', function (req, res) {
+app.post('/UpateOrderFormAttendance', isAuthenticated, function (req, res) {
     var data = req.data;
     handle["/UpateOrderFormAttendance"](data);
 });
 
-app.get('/UpateOrderFormAttendance', function (req, res) {
+app.get('/UpateOrderFormAttendance', isAuthenticated, function (req, res) {
     var data = req.data;
     handle["/UpateOrderFormAttendance"](data);
 });
 
-app.get('/GetStores', function (req, res) {      
+app.get('/GetStores', isAuthenticated, function (req, res) {      
     var data = req.data;
     handle["/GetStores"](data);
 });
 
-app.get('/GetStoreByID', function (req, res) {
+app.get('/GetStoreByID', isAuthenticated, function (req, res) {
     var data = req.data;
     handle["/GetStoreByID"](data);
 });
 
-app.post('/DeleteOrderFormItem', function (req, res) {
+app.post('/DeleteOrderFormItem', isAuthenticated, function (req, res) {
     var data = req.data;
     handle["/DeleteOrderFormItem"](data);
 });
 
-app.post('/CreateAccount', function (req, res) {
+app.post('/CreateAccount', isAuthenticated, function (req, res) {
     var data = req.data;
     handle["/CreateAccount"](data);
 });
 
-app.get('/CreateStore', function (req, res) {
+app.post('/CreateStore', isAuthenticated, function (req, res) {
     var data = req.data;
     handle["/CreateStore"](data);
+});
+
+app.post('/CreateMenu', isAuthenticated, function (req, res) {
+    var data = req.data;
+    handle["/CreateMenu"](data);
 });
 
 app.listen(port);

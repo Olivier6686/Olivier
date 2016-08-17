@@ -117,9 +117,14 @@ function updateAttendance(response, id, attendance) {
     });
 }
 
-function SendSucceed(response)
+function SendSucceed(response, ret)
 {
-    var ret = { IsSucceed: true };
+    var defaultRet = { IsSucceed: true };
+    if (ret === undefined)
+        ret = defaultRet;
+    else
+        ret.IsSucceed = true;
+    
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
     var json = JSON.stringify(ret);
     response.write(json);

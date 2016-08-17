@@ -21,7 +21,7 @@ function AddAccount(data)
     sqlRequest.input('username', username);
     sqlRequest.input('realname', realname);
     sqlRequest.input('password', password);
-    sqlRequest.input('orderlist', '[]');
+    sqlRequest.input('orderlist', '');
     sqlRequest.input('email', email);
 
     var query = 'INSERT INTO Account(UserName, RealName, Password, OrderList, Email) VALUES(@username, @realname, @password, @orderlist, @email);';

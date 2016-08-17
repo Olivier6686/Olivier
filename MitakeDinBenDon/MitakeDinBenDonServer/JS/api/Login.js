@@ -29,6 +29,9 @@ function login(data)
     getAccount.getAccount(data, function(account) {
         if (account) {
             if (args.Password === account.Password) {
+                var sess = request.session;
+                if (sess)
+                    sess.data = account;
                 response.writeHead(200, {'Content-Type': 'application/json; charset=utf-8','Access-Control-Allow-Origin':'*'});
                 account.IsSucceed = true;                
                 account.OrderList = new Buffer(account.OrderList).toString('base64');

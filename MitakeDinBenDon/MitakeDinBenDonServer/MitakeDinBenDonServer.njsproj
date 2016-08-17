@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="JS\api\CreateAccount.js" />
+    <Compile Include="JS\api\CreateMenu.js" />
     <Compile Include="JS\api\CreateStore.js" />
     <Compile Include="JS\api\DeleteOrderFormItem.js" />
     <Compile Include="JS\api\EstablishOrder.js" />
@@ -58,6 +59,7 @@
     <Folder Include="JS\Common\" />
     <Folder Include="typings\" />
     <Folder Include="typings\globals\" />
+    <Folder Include="typings\globals\express-session\" />
     <Folder Include="typings\globals\express\" />
     <Folder Include="typings\globals\lodash\" />
     <Folder Include="typings\globals\mssql\" />
@@ -65,6 +67,7 @@
     <Folder Include="typings\globals\node\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="typings\globals\express-session\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\express\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\lodash\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\mssql\index.d.ts" />
