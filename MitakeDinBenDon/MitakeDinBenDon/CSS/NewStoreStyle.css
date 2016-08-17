@@ -1,0 +1,54 @@
+﻿.bgimg_11 {
+    background-image: url("../Images/bgimg_11.jpg");
+    min-height: 400px;
+}
+
+.bgimg_12 {
+    background-image: url("../Images/bgimg_12.jpg");
+    min-height: 400px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.baseButton {
+    background-color: #ffffff;
+    color: #444444;
+    cursor: pointer;
+    width: 10%;
+    border: none;
+    text-align: center;
+    outline: none;
+    padding: 0;
+    margin: 0;
+}
+
+.addButton {
+    background-color: #eeeeee;
+}
+
+.addButton:after {
+    content: '\02795';
+    font-size: 13px;
+    color: #777777;
+}
+
+.deleteButton:after {
+    content: '\0274C';
+    font-size: 13px;
+    color: #777777;
+}
+
+.modifyButton:after {
+    content: '\0270E';
+    font-size: 13px;
+    color: #777777;
+}
+
+.right {
+    float: right;
+    padding-top: 2px;
+}
