@@ -47,7 +47,6 @@
     <Compile Include="JS\Common\common.js" />
     <Compile Include="JS\Common\Connection.js" />
     <Compile Include="JS\requestHandlers.js" />
-    <Compile Include="JS\router.js" />
     <Compile Include="JS\server.js" />
     <Content Include="JS\Common\config.json" />
     <Content Include="package.json" />
