@@ -1,6 +1,13 @@
 ﻿var Modal, MapDiv;
 
 function getOrderItemByUserName() {
+
+    //generateOngoingItem("Title1", "Des1", "2016-08-12 03:00:00", "1234");
+    //generateOngoingItem("Title3", "Des3", "2016-08-17 17:00:00", "1234");
+    //generateOngoingItem("Title2", "Des2", "2016-08-18 01:00:00", "1234");
+    //setOngoingAnimation();
+
+
     var orderList = getSessionStorage("OrderList");
 
     if (isStringEmpty(orderList)) {
@@ -76,7 +83,7 @@ function getItemNameByID(source, itemID) {
     }
 }
 
-function generateOngoingItem(title, item, detail, orderFormID) {
+function generateOngoingItem(title, des, time, orderFormID) {
     var div = document.getElementById("ongoingSection"); 
     var btn = document.createElement("button");
     btn.innerHTML = title;
@@ -91,7 +98,7 @@ function generateOngoingItem(title, item, detail, orderFormID) {
     td1 = tr.insertCell(0);
     td1.className = "ongoingTable"
     td1.style.width = "80%";
-    td1.innerHTML = item + " - " + detail;
+    td1.innerHTML = des + " - " + time;
 
     var statisticBtn = document.createElement("button");
     statisticBtn.innerHTML = "Statistic";
@@ -106,6 +113,9 @@ function generateOngoingItem(title, item, detail, orderFormID) {
     td2.appendChild(statisticBtn)
     d.appendChild(table);
 
+    if (isExpired(time))
+        btn.className = "accordion ongoginChecked";
+        
     div.appendChild(btn);
     div.appendChild(d);
 }

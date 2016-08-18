@@ -92,6 +92,14 @@ function isDateValid(inputDate) {
     return isValid;
 }
 
+function isExpired(inputString) {
+    var inputDate = new Date(inputString);
+    var now = new Date();
+    if (inputDate < now)
+        return true;
+    return false;
+}
+
 function clearChild(elementName) {
     var div = document.getElementById(elementName);
     while (div.firstChild) {

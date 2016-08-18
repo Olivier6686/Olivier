@@ -148,3 +148,18 @@ ul.tab li a:focus, .active {
     from {opacity: 0;}
     to {opacity: 1;}
 }
+
+button.ongoginChecked {
+    color: #ffffff;
+    text-decoration: line-through;
+    background-color: #999999;
+}
+
+button.ongoginChecked:before {
+    content: '\02713';
+    padding-right: 5px;
+}
+
+button.ongoginChecked:after {
+    color: #ffffff;
+}

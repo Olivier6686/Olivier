@@ -204,6 +204,9 @@ function onStatisticsTableSuccess(args) {
             td = tr.insertCell(tr.cells.length);
             td.colSpan = 5;
             td.innerHTML = total;
+
+            if (isExpired(OrderForm.ExpiredTime))
+                $("#orderBtn").css("display", "none");
         }
         else {
             document.getElementById("emptyMsg").style.opacity = 1;
