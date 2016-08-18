@@ -17,7 +17,7 @@
 }
 
 button.accordion {
-    background-color: #eee;
+    background-color: #eeeeee;
     color: #444444;
     cursor: pointer;
     padding: 18px;
@@ -46,13 +46,13 @@ div.panel.show {
 button.accordion:after {
     content: '\02795';
     font-size: 13px;
-    color: #777;
+    color: #777777;
     float: right;
     margin-left: 5px;
 }
 
 button.accordion.active:after {
-    content: "\2796";
+    content: '\2796';
 }
 
 .search_input {
