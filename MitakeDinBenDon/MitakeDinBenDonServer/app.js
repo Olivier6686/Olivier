@@ -1,11 +1,11 @@
-var server = require("./js/server");
-var route  = require("./js/router");
+//var server = require("./js/server");
+//var router  = require("./js/router");
 var requestHandlers = require("./js/requestHandlers");
 var url = require("url");
 var querystring = require('querystring');
 var express = require('express');
 var session = require('express-session');
-
+//var router = express.Router()
 var app = express();
 var pathname = __dirname;
 var port = 8888;
@@ -31,7 +31,7 @@ var myParamter = function (req, res, next) {
     var postData = "";
     var pathname = url.parse(req.url).pathname;
     var query = url.parse(req.url).query;
-    var json = querystring.parse(query);
+    //var json = querystring.parse(query);
 
     var data = {};
     data.handle = handle;
@@ -65,7 +65,6 @@ var myParamter = function (req, res, next) {
 };
 
 app.use(myParamter);
-
 app.use(session({
     secret: 'HsiwGsswdddkUATdfded',
     resave: false,
@@ -74,15 +73,14 @@ app.use(session({
     data: {}
 }));
 
-
-
-function isAuthenticated(req, res, next) {
+function isAuthenticated(req, res, next) {    
     sess = req.session;
+    //if (sess === undefined)
+        //return next();
     var ID = req.session.data;
     if (req.session.data)
         return next();
-    res.redirect(redirect);
-
+    res.redirect(redirect);    
 }
 
 app.get('/', function (req, res) {    
@@ -97,7 +95,7 @@ app.post('/login', function (req, res) {
     handle["/login"](data);
 });
 
-app.get('/GetStoresByName', isAuthenticated, function (req, res) {    
+app.get('/GetStoresByName',  function (req, res) {    
     var data = req.data;
     handle["/GetStoresByName"](data);
 });
@@ -157,5 +155,7 @@ app.post('/CreateMenu', isAuthenticated, function (req, res) {
     handle["/CreateMenu"](data);
 });
 
+//app.use(router);
 app.listen(port);
+console.log('listen port:' + port);
 //server.start(route.route, handle);
