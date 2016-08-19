@@ -24,6 +24,7 @@
         <ul class="tab" style="display:table;margin:auto">
             <li><a class="tablinks active" onclick="openTab(event, 'searchDiv')">Search</a></li>
             <li><a class="tablinks" onclick="openTab(event, 'mapDiv')">Map</a></li>
+            <li><a class="tablinks" onclick="openTab(event, 'recentlyUseDiv')">Recently Use</a></li>
         </ul>
 
         <div id="searchDiv" class="tabcontent" style="width:50%;margin:auto;display:block;">
@@ -37,8 +38,13 @@
             <div id="map" style="margin:auto;width:60%;height:500px"></div>
         </div>
 
+        <div id="recentlyUseDiv" class="tabcontent" style="width:50%;margin:auto;">
+            <h3 style="text-align:center">Those stores you use recently</h3>
+            <div id="recentlyUseSection"></div>
+        </div>
+
         <div style="text-align:right;margin:25px auto;width:50%;">
-            <span style="width:auto;">or <a href="../HTML/SignupPage.html">Create New Store</a></span>
+            <span style="width:auto;">or <a href="../HTML/NewStorePage.html">Create New Store</a></span>
         </div>
     </div>
 

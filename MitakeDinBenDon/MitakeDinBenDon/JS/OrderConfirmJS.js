@@ -154,26 +154,40 @@ function onStatisticsTableSuccess(args) {
             document.getElementById("emptyMsg").style.opacity = 0;
             var total = 0;
 
-            var tr = table.insertRow(0);
-            td = tr.insertCell(0);
-            td.innerHTML = "Name"
-            td = tr.insertCell(1);
-            td.innerHTML = "Amount";
-            td = tr.insertCell(2);
-            td.innerHTML = "Price";
-            td = tr.insertCell(3);
-            td.innerHTML = "Attendance"
-            td = tr.insertCell(4);
-            td.innerHTML = "Description";
-            td = tr.insertCell(5);
-            td.innerHTML = "Action";
+            var header = table.createTHead();
+            var tr = header.insertRow(0);
+            var th = document.createElement("th");
+            th.innerHTML = "Name"
+            tr.appendChild(th);
+
+            var th = document.createElement("th");
+            th.innerHTML = "Amount"
+            tr.appendChild(th);
+
+            var th = document.createElement("th");
+            th.innerHTML = "Price"
+            tr.appendChild(th);
+
+            var th = document.createElement("th");
+            th.innerHTML = "Attendance"
+            tr.appendChild(th);
+
+            var th = document.createElement("th");
+            th.innerHTML = "Description"
+            tr.appendChild(th);
+
+            var th = document.createElement("th");
+            th.innerHTML = "Action"
+            tr.appendChild(th);
+
+            var body = table.createTBody();
 
             for (var i = 0; i < OrderForm.Attendance.length; i++) {
                 var detail = { name: undefined, price: undefined };
                 var exist = getOrderItem(Menu.Items, OrderForm.Attendance[i].ItemID, OrderForm.Attendance[i].CheckIndex, detail);
                 if (exist) {
-                    var num = table.rows.length;
-                    var tr = table.insertRow(num);
+                    var num = body.rows.length;
+                    var tr = body.insertRow(num);
                     td = tr.insertCell(tr.cells.length);
                     td.innerHTML = detail.name;
                     td.id = OrderForm.Attendance[i].ItemID;
@@ -198,15 +212,8 @@ function onStatisticsTableSuccess(args) {
                 }
             }
 
-            var tr = table.insertRow(table.rows.length);
-            td = tr.insertCell(0);
-            td.innerHTML = "Total"
-            td = tr.insertCell(tr.cells.length);
-            td.colSpan = 5;
-            td.innerHTML = total;
-
-            if (isExpired(OrderForm.ExpiredTime))
-                $("#orderBtn").css("display", "none");
+            $("#totalPrice").html("Total: " + total);
+            $("#productTable").tablesorter();
         }
         else {
             document.getElementById("emptyMsg").style.opacity = 1;
@@ -215,6 +222,10 @@ function onStatisticsTableSuccess(args) {
     else {
         setWarningMsg(true, "Parameter error!");
     }
+
+    var inputDate = new Date(OrderForm.ExpiredTime);
+    if (!isDateValid(inputDate))
+        $("#orderBtn").css("display", "none");
 }
 
 function onStatisticsTableError(args) {
@@ -534,4 +545,82 @@ function createOrderTable2() {
             td.appendChild(text);
         }
     }
+}
+
+function Test() {
+    var table = document.getElementById("productTable");
+    var total = 0;
+
+    var header = table.createTHead();
+    var tr = header.insertRow(0);
+    var th = document.createElement("th");
+    th.innerHTML = "Name"
+    tr.appendChild(th);
+
+    var th = document.createElement("th");
+    th.innerHTML = "Amount"
+    tr.appendChild(th);
+
+    var th = document.createElement("th");
+    th.innerHTML = "Price"
+    tr.appendChild(th);
+
+    var th = document.createElement("th");
+    th.innerHTML = "Attendance"
+    tr.appendChild(th);
+
+    var th = document.createElement("th");
+    th.innerHTML = "Description"
+    tr.appendChild(th);
+
+    var th = document.createElement("th");
+    th.innerHTML = "Action"
+    tr.appendChild(th);
+
+    var body = table.createTBody();
+
+    var ofs = JSON.parse(orderForms)[0];
+    var m = JSON.parse(menuJson);
+
+    for (var i = 0; i < ofs.Attendance.length; i++) {
+        var detail = { name: undefined, price: undefined };
+        var exist = getOrderItem(m.Items, ofs.Attendance[i].ItemID, ofs.Attendance[i].CheckIndex, detail);
+        if (exist) {
+            detail.price = "30";
+            //var num = table.rows.length;
+            //var tr = table.insertRow(num);            
+            var num = body.rows.length;
+            var tr = body.insertRow(num);
+            td = tr.insertCell(tr.cells.length);
+            td.innerHTML = detail.name;
+            td.id = ofs.Attendance[i].ItemID;
+            td.name = ofs.Attendance[i].AttendanceID;
+            td = tr.insertCell(tr.cells.length);
+            td.innerHTML = ofs.Attendance[i].Amount;
+            td = tr.insertCell(tr.cells.length);
+            td.innerHTML = detail.price;
+            td = tr.insertCell(tr.cells.length);
+            td.innerHTML = ofs.Attendance[i].Name;
+            td = tr.insertCell(tr.cells.length);
+            td.innerHTML = ofs.Attendance[i].Description;
+
+            td = tr.insertCell(tr.cells.length);
+            var btn = document.createElement("button");
+            btn.innerHTML = "Delete";
+            btn.style.width = "100%";
+            btn.onclick = onDeleteClick;
+            td.appendChild(btn);
+
+            total += calculateTotalPrice(ofs.Attendance[i].Amount, detail.price);
+        }
+    }
+
+    //var tr = table.insertRow(table.rows.length);
+    //td = tr.insertCell(0);
+    //td.innerHTML = "Total"
+    //td = tr.insertCell(tr.cells.length);
+    //td.colSpan = 5;
+    //td.innerHTML = total;
+    $("#totalPrice").html("Total: " + total);
+    $("#productTable").tablesorter();
 }

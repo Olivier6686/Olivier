@@ -84,7 +84,7 @@ function getItemNameByID(source, itemID) {
 }
 
 function generateOngoingItem(title, des, time, orderFormID) {
-    var div = document.getElementById("ongoingSection"); 
+    var div = document.getElementById("ongoingSection");
     var btn = document.createElement("button");
     btn.innerHTML = title;
     btn.className = "accordion";
@@ -113,9 +113,10 @@ function generateOngoingItem(title, des, time, orderFormID) {
     td2.appendChild(statisticBtn)
     d.appendChild(table);
 
-    if (isExpired(time))
+    var inputDate = new Date(time);
+    if (!isDateValid(inputDate))
         btn.className = "accordion ongoginChecked";
-        
+
     div.appendChild(btn);
     div.appendChild(d);
 }
@@ -144,7 +145,8 @@ function searchStores(keyword) {
 function onSearchSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        generateSearchItem(args.Stores);
+        var div = document.getElementById("searchSection");
+        generateStoreItem(args.Stores, div);
     }
     else {
         setWarningMsg(true, "There is no item matched!");
@@ -155,8 +157,7 @@ function onSearchError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
-function generateSearchItem(stores) {
-    var div = document.getElementById("searchSection");
+function generateStoreItem(stores, div) {
     for (var i = 0; i < stores.length; i++) {
         var element = document.createElement("button");
         element.data = JSON.stringify(stores[i]); //To storage store information
@@ -187,7 +188,7 @@ function showMenuModal(store) {
 }
 
 function onMenuCancelClick() {
-    Modal.style.display = "none";   
+    Modal.style.display = "none";
     $("#outerBody").css("overflowY", "scroll");
     clearChild("productTable");
 }
@@ -221,20 +222,30 @@ function openTab(event, methodName) {
 
     if (methodName == "mapDiv")
         initailMap();
+
+    if (methodName == "recentlyUseDiv")
+        getRecentlyUseStores();
 }
 
 function initailMap() {
     if (navigator.geolocation) {
         if (MapDiv == undefined) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                console.log("Get current location success: " + position.coords.latitude + " @ " + position.coords.longitude);
-                setCenterMap(latLng);
-            }, function (error) {
+            try {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    console.log("Get current location success: " + position.coords.latitude + " @ " + position.coords.longitude);
+                    setCenterMap(latLng);
+                }, function (error) {
+                    var latLng = new google.maps.LatLng(25.055297, 121.5272828);
+                    console.log("Get current location fail: " + "25.055297 @ 121.5272828");
+                    setCenterMap(latLng);
+                })
+            }
+            catch (e) {
                 var latLng = new google.maps.LatLng(25.055297, 121.5272828);
                 console.log("Get current location fail: " + "25.055297 @ 121.5272828");
                 setCenterMap(latLng);
-            })
+            }
         }
     }
 }
@@ -289,10 +300,14 @@ function addMarker(store, geocoder) {
 }
 
 function getStores() {
+    var date = new Date();
+    var time = date.getTime();
+
     var api = ServerURL + "/GetStores";
     var parameter = {
-        param: "",
+        param: { timestamp: time },
         type: "GET",
+        cache: false,
         success: (args) => { onGetStoresSuccess(args) },
         error: (args) => { onGetStoresError(args) }
     }
@@ -311,5 +326,41 @@ function onGetStoresSuccess(args) {
 }
 
 function onGetStoresError(args) {
+    setWarningMsg(true, "Some errors occur");
+}
+
+function getRecentlyUseStores() {
+    var name = getSessionStorage("UserName");
+    if (!isStringEmpty(name)) {
+        var api = ServerURL + "/GetRecentlyUseStores";
+        var parameter = {
+            param: { UserName: name },
+            type: "GET",
+            success: (args) => { onGetRecentlyUseStoresSuccess(args) },
+            error: (args) => { onGetRecentlyUseStoresError(args) }
+        }
+
+        query(api, parameter);
+    }
+    else {
+        setWarningMsg(true, "Some errors occur");
+    }
+}
+
+function onGetRecentlyUseStoresSuccess(args) {
+    if (args.IsSucceed) {
+        if (args.Stores.length > 0) {
+            setWarningMsg(false, "");
+            clearChild("recentlyUseSection");
+            var div = document.getElementById("recentlyUseSection");
+            generateStoreItem(args.Stores, div);
+        }
+    }
+    else {
+        setWarningMsg(true, "Parameters error");
+    }
+}
+
+function onGetRecentlyUseStoresError(args) {
     setWarningMsg(true, "Some errors occur");
 }

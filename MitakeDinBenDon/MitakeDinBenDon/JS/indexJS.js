@@ -2,8 +2,10 @@
     var name = $("#username").val();
     var psw = $("#psw").val();
 
-    if (isStringEmpty(name) || isStringEmpty(psw))
+    if (isStringEmpty(name) || isStringEmpty(psw)) {
         setWarningMsg(true, "Please fill user name and password");
+        return;
+    }      
 
     var api = ServerURL + "/login";
     var parameter = {
