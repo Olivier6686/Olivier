@@ -107,6 +107,23 @@ function clearChild(elementName) {
     }
 }
 
+function checkSessionValid(onSessionValidSuccess) {
+    var date = new Date();
+    var time = date.getTime();
+
+    var api = ServerURL + "/SessionCheck";
+    var parameter = {
+        param: { timestamp: time },
+        type: "POST",
+        success: (args) => { onSessionValidSuccess(args) },
+        error: (args) => {
+            window.location.assign("../index.HTML");
+        }
+    }
+
+    query(api, parameter);
+}
+
 function queryMenu(storeID, onGetMenuSuccess, onGetMenuError) {
     var api = ServerURL + "/GetMenuByStoreID";
     var parameter = {

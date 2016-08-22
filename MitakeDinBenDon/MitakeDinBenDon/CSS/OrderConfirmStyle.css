@@ -23,3 +23,14 @@ input.copyImage {
     cursor: pointer;
     text-decoration: none;
 }
+
+.deleteButton {
+    background-color: transparent;
+    width: 100%;
+}
+
+.deleteButton:after {
+    content: '\0274C';
+    font-size: 13px;
+    color: #777777;
+}

@@ -203,8 +203,7 @@ function onStatisticsTableSuccess(args) {
 
                     td = tr.insertCell(tr.cells.length);
                     var btn = document.createElement("button");
-                    btn.innerHTML = "Delete";
-                    btn.style.width = "100%";
+                    btn.className = "deleteButton";
                     btn.onclick = onDeleteClick;
                     td.appendChild(btn);
 
@@ -606,8 +605,8 @@ function Test() {
 
             td = tr.insertCell(tr.cells.length);
             var btn = document.createElement("button");
-            btn.innerHTML = "Delete";
-            btn.style.width = "100%";
+            btn.className = "deleteButton";
+            //btn.style.width = "100%";
             btn.onclick = onDeleteClick;
             td.appendChild(btn);
 
