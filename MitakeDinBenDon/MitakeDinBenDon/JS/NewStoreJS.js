@@ -1,5 +1,18 @@
 ﻿var Menu = [];
 
+function checkSessionValid() {
+    querySessionValid(onSessionValidSuccess);
+}
+
+function onSessionValidSuccess(args) {
+    if (args.IsSucceed) {
+        //Do Nothing!
+    }
+    else {
+        window.location.assign("../index.HTML");
+    }
+}
+
 function onAddClick() {
     setWarningMsg(false, "");
 

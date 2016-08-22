@@ -1,41 +1,45 @@
 ﻿var Modal, MapDiv;
 
-function getOrderItemByUserName() {
-    checkSessionValid(onSessionValidSuccess);
+function checkSessionValid() {
+    querySessionValid(onSessionValidSuccess);
 }
 
 function onSessionValidSuccess(args) {
     if (args.IsSucceed) {
-        //generateOngoingItem("Title1", "Des1", "2016-08-12 03:00:00", "1234");
-        //generateOngoingItem("Title3", "Des3", "2016-08-17 17:00:00", "1234");
-        //generateOngoingItem("Title2", "Des2", "2016-08-18 01:00:00", "1234");
-        //setOngoingAnimation();
-
-        var orderList = getSessionStorage("OrderList");
-
-        if (isStringEmpty(orderList)) {
-            setWarningMsg(true, "You have no ongoing orders");
-        }
-        else {
-            setWarningMsg(false, "");
-
-            var GUIDs = JSON.parse(orderList).map(function (item) {
-                return item.OrderFormID;
-            }).join(",");
-
-            var api = ServerURL + "/GetOrderFormsByID";
-            var parameter = {
-                param: { OrderFormIDs: GUIDs },
-                type: "GET",
-                success: (args) => { onGetOrderFormSuccess(args) },
-                error: (args) => { onGetOrderFormError(args) }
-            }
-
-            query(api, parameter);
-        }
+        getOrderItemByUserName();
     }
     else {
         window.location.assign("../index.HTML");
+    }
+}
+
+function getOrderItemByUserName() {
+    //generateOngoingItem("Title1", "Des1", "2016-08-12 03:00:00", "1234");
+    //generateOngoingItem("Title3", "Des3", "2016-08-17 17:00:00", "1234");
+    //generateOngoingItem("Title2", "Des2", "2016-08-18 01:00:00", "1234");
+    //setOngoingAnimation();
+
+    var orderList = getSessionStorage("OrderList");
+
+    if (isStringEmpty(orderList)) {
+        setWarningMsg(true, "You have no ongoing orders");
+    }
+    else {
+        setWarningMsg(false, "");
+
+        var GUIDs = JSON.parse(orderList).map(function (item) {
+            return item.OrderFormID;
+        }).join(",");
+
+        var api = ServerURL + "/GetOrderFormsByID";
+        var parameter = {
+            param: { OrderFormIDs: GUIDs },
+            type: "GET",
+            success: (args) => { onGetOrderFormSuccess(args) },
+            error: (args) => { onGetOrderFormError(args) }
+        }
+
+        query(api, parameter);
     }
 }
 

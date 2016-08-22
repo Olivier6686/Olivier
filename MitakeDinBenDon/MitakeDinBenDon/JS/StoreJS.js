@@ -1,5 +1,18 @@
 ﻿var StoreID;
 
+function checkSessionValid() {
+    querySessionValid(onSessionValidSuccess);
+}
+
+function onSessionValidSuccess(args) {
+    if (args.IsSucceed) {
+        queryStoreInfo();
+    }
+    else {
+        window.location.assign("../index.HTML");
+    }
+}
+
 function queryStoreInfo() {
     var url = window.location.search;
     StoreID = getParameterByName("StoreID", url);

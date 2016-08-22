@@ -107,7 +107,7 @@ function clearChild(elementName) {
     }
 }
 
-function checkSessionValid(onSessionValidSuccess) {
+function querySessionValid(onSessionValidSuccess) {
     var date = new Date();
     var time = date.getTime();
 
