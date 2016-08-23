@@ -10,6 +10,7 @@ var app = express();
 var pathname = __dirname;
 var port = 8888;
 var redirect = 'http://10.1.4.133:' + port + '/Main/index.html';
+//var redirect2 = 'http://www.google.com';
 
 var handle = {};
 handle["/login"] = requestHandlers.Login;
@@ -24,6 +25,9 @@ handle["/DeleteOrderFormItem"] = requestHandlers.DeleteOrderFormItem;
 handle["/CreateAccount"] = requestHandlers.CreateAccount;
 handle["/CreateStore"] = requestHandlers.CreateStore;
 handle["/CreateMenu"] = requestHandlers.CreateMenu;
+handle["/SessionCheck"] = requestHandlers.SessionCheck;
+handle["/GetRecentlyUseStores"] = requestHandlers.GetRecentlyUseStores;
+
 
 app.use('/Main', express.static(pathname.replace('MitakeDinBenDonServer', 'MitakeDinBenDon')));
 
@@ -73,16 +77,6 @@ app.use(session({
     data: {}
 }));
 
-function isAuthenticated(req, res, next) {    
-    sess = req.session;
-    //if (sess === undefined)
-        //return next();
-    var ID = req.session.data;
-    if (req.session.data)
-        return next();
-    res.redirect(redirect);    
-}
-
 app.get('/', function (req, res) {    
     res.writeHead(301,
         { Location: redirect }
@@ -100,59 +94,69 @@ app.get('/GetStoresByName',  function (req, res) {
     handle["/GetStoresByName"](data);
 });
 
-app.get('/GetMenuByStoreID', isAuthenticated, function (req, res) {    
+app.get('/GetMenuByStoreID', function (req, res) {    
     var data = req.data;
     handle["/GetMenuByStoreID"](data);
 });
 
-app.post('/EstablishOrder', isAuthenticated, function (req, res) {
+app.post('/EstablishOrder', function (req, res) {
     var data = req.data;
     handle["/EstablishOrder"](data);
 });
 
-app.get('/GetOrderFormsByID', isAuthenticated, function (req, res) {    
+app.get('/GetOrderFormsByID', function (req, res) {    
     var data = req.data;
     handle["/GetOrderFormsByID"](data);
 });
 
-app.post('/UpateOrderFormAttendance', isAuthenticated, function (req, res) {
+app.post('/UpateOrderFormAttendance', function (req, res) {
     var data = req.data;
     handle["/UpateOrderFormAttendance"](data);
 });
 
-app.get('/UpateOrderFormAttendance', isAuthenticated, function (req, res) {
+app.get('/UpateOrderFormAttendance', function (req, res) {
     var data = req.data;
     handle["/UpateOrderFormAttendance"](data);
 });
 
-app.get('/GetStores', isAuthenticated, function (req, res) {      
+app.get('/GetStores', function (req, res) {      
     var data = req.data;
     handle["/GetStores"](data);
 });
 
-app.get('/GetStoreByID', isAuthenticated, function (req, res) {
+app.get('/GetStoreByID', function (req, res) {
     var data = req.data;
     handle["/GetStoreByID"](data);
 });
 
-app.post('/DeleteOrderFormItem', isAuthenticated, function (req, res) {
+app.post('/DeleteOrderFormItem', function (req, res) {
     var data = req.data;
     handle["/DeleteOrderFormItem"](data);
 });
 
-app.post('/CreateAccount', isAuthenticated, function (req, res) {
+app.post('/CreateAccount', function (req, res) {
     var data = req.data;
     handle["/CreateAccount"](data);
 });
 
-app.post('/CreateStore', isAuthenticated, function (req, res) {
+app.post('/CreateStore', function (req, res) {
     var data = req.data;
     handle["/CreateStore"](data);
 });
 
-app.post('/CreateMenu', isAuthenticated, function (req, res) {
+app.post('/CreateMenu', function (req, res) {
     var data = req.data;
     handle["/CreateMenu"](data);
+});
+
+app.post('/SessionCheck', function (req, res) {
+    var data = req.data;
+    handle["/SessionCheck"](data);
+});
+
+app.get('/GetRecentlyUseStores', function (req, res) {
+    var data = req.data;
+    handle["/GetRecentlyUseStores"](data);
 });
 
 //app.use(router);

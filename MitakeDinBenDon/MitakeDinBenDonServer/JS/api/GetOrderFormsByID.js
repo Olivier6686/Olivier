@@ -47,7 +47,7 @@ function getOrderFormsByID(data) {
 
     sqlRequest = new sql.Request(connection);
     sqlRequest.input('condition', condition);
-    query = 'select * from OrderForm where ' + condition;
+    query = 'select * from OrderForm where ' + condition + ' ORDER BY ExpiredTime ASC;';
     console.log("sql command =" + query);
     // or request.execute(procedure);
     sqlRequest.query(query).then(function (recordset) {

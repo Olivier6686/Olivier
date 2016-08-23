@@ -30,8 +30,8 @@ function createStore(data, callback) {
 
     var query = 'INSERT INTO Store(StoreName, Address, Phone, Fax, MenuID) VALUES(@stroename, @address, @phone, @fax, @menuid);';
 
-    sqlRequest.query(query).then(function (recordset) {        
-        common.sendSucceed(response);
+    sqlRequest.query(query).then(function (recordset) {
+        common.sendSucceed(response, undefined);
     }).catch(function (err) {
         console.dir(err);
         common.ReturnError(err, response);

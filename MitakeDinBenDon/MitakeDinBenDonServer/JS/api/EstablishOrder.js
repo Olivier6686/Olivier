@@ -10,8 +10,12 @@ function updateOrderList(data, callback)
 {
     var request   = data.request;
     var response  = data.response;
-    var username  = data.Username;
-    var OrderGuid = data.uuid; 
+    var username = data.Username;
+    var OrderGuid = data.uuid;
+    var querys = data.query;
+    var args = querystring.parse(querys);    
+
+    var storeID = args.StoreID; 
 
     getAccount.getAccount(data, function(account){
         var newOrderList = "";
@@ -26,11 +30,24 @@ function updateOrderList(data, callback)
                     newOrderList = "[" + account.OrderList +  ", {" + "\"OrderFormID\":\"" + OrderGuid  + "\"}]";
                 }
             }
-            
+            var usesotres = "";
+            if (!account.RecentlyUseStores) {
+                usesotres = '[{\"StoreID\":\"' + storeID + '\"}]';
+            }
+            else {
+                var item = { StoreID: storeID };
+                var obj = JSON.parse(account.RecentlyUseStores);
+                obj.unshift(item);
+                if (obj.length > 10)
+                    obj.pop();
+                usesotres = JSON.stringify(obj);  
+            }
             var sqlRequest = new sql.Request(connection);
             sqlRequest.input('username', username);
             sqlRequest.input('orderlist', newOrderList);
-            var query = 'UPDATE Account SET OrderList=@orderlist WHERE UserName=@username';
+            sqlRequest.input('useStores', usesotres);
+
+            var query = 'UPDATE Account SET OrderList=@orderlist,RecentlyUseStores=@useStores WHERE UserName=@username';
             sqlRequest.query(query).then(function(recordset) {
                 if (typeof(callback) === 'function') {
                     callback();
@@ -52,14 +69,6 @@ function establishOrder(data) {
     var  response = data.response;
     var  querys    = data.query;
     var args = querystring.parse(querys);    
-
-
-    if (request.method === "GET") {
-        response.writeHead(404, {"Content-Type": "text/plain"});
-        response.write("404 Not Found\n");
-        response.end();
-        return;
-    }
     
     console.log("Request handler '/establishOrder' was called.");
     console.log(args);

@@ -38,10 +38,12 @@
     <Compile Include="JS\api\GetAccount.js" />
     <Compile Include="JS\api\GetMenuByStoreID.js" />
     <Compile Include="JS\api\GetOrderFormsByID.js" />
+    <Compile Include="JS\api\GetRecentlyUseStores.js" />
     <Compile Include="JS\api\GetStoreByID.js" />
     <Compile Include="JS\api\GetStores.js" />
     <Compile Include="JS\api\GetStoresByName.js" />
     <Compile Include="JS\api\Login.js" />
+    <Compile Include="JS\api\SessionCheck.js" />
     <Compile Include="JS\api\UpateOrderFormAttendance.js" />
     <Compile Include="app.js" />
     <Compile Include="JS\Common\common.js" />
