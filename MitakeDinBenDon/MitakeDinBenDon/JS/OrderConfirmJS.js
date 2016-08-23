@@ -397,7 +397,7 @@ function tableToJson() {
     var total = 0;
     var totalAmount = 0;
 
-    for (var i = 1; i < table.rows.length - 1; i++) {
+    for (var i = 1; i < table.rows.length; i++) {
         var row = table.rows[i];
         var name = row.cells[0].innerHTML;
         var amount = row.cells[1].innerHTML;

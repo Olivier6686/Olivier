@@ -13,39 +13,47 @@
 </head>
 
 <body onload="generateRandomNumbers()">
-    <div class="bgimg_4 bgimg">
-        <div class="caption">
-            <span class="border">Sign Up</span>
-        </div>
+    <div id="topSidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="../index.html">Home</a>
+        <a href="AboutPage.html">About</a>
     </div>
 
-    <div class="container" style="width:30%;margin:0 auto">
+    <div id="main">
+        <div class="bgimg_4 bgimg">
+            <span class="topNavMenu" onclick="openNav()"> Menu</span>
+            <div class="caption">
+                <span class="border">Sign Up</span>
+            </div>
+        </div>
 
-        <span><b>Real Name</b></span>
-        <input id="realname" class="input" type="text" placeholder="Enter Real Name" required />
+        <div class="container" style="width:30%;margin:0 auto">
 
-        <span><b>Username</b></span>
-        <input id="username" class="input" type="text" placeholder="Enter Username" required />
+            <span><b>Real Name</b></span>
+            <input id="realname" class="input" type="text" placeholder="Enter Real Name" required />
 
-        <span><b>Password</b></span>
-        <input id="psw" class="input" type="password" placeholder="Enter Password" required />
+            <span><b>Username</b></span>
+            <input id="username" class="input" type="text" placeholder="Enter Username" required />
 
-        <span><b>Enter Password Again</b></span>
-        <input id="re_psw" class="input" type="password" placeholder="Enter Password Again" required />
+            <span><b>Password</b></span>
+            <input id="psw" class="input" type="password" placeholder="Enter Password" required />
 
-        <span><b>Enter E-Mail</b></span>
-        <input id="email" class="input" type="email" placeholder="Enter E-Mail" required />
+            <span><b>Enter Password Again</b></span>
+            <input id="re_psw" class="input" type="password" placeholder="Enter Password Again" required />
 
-        <span><b>Answer it: </b></span>
-        <span id="num1"></span> <span> + </span> <span id="num2"></span> <span> = </span>
-        <input id="sum" class="input" type="number" placeholder="Enter number" required />
+            <span><b>Enter E-Mail</b></span>
+            <input id="email" class="input" type="email" placeholder="Enter E-Mail" required />
 
-        <div>
-            <button style="background-color:#90EE90;" onclick="onConfirmClick()">Confirm</button>
-            <button onclick="onCancelClick()" style="background-color:#FFA07A;float:right;">Cancel</button>
-            <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
+            <span><b>Answer it: </b></span>
+            <span id="num1"></span> <span> + </span> <span id="num2"></span> <span> = </span>
+            <input id="sum" class="input" type="number" placeholder="Enter number" required />
+
+            <div>
+                <button style="background-color:#90EE90;" onclick="onConfirmClick()">Confirm</button>
+                <button onclick="onCancelClick()" style="background-color:#FFA07A;float:right;">Cancel</button>
+                <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
+            </div>
         </div>
     </div>
-
 </body>
 </html>

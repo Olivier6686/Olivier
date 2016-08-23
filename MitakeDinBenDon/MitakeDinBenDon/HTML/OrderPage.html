@@ -9,84 +9,92 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="../JS/Common.js"></script>
     <script src="../JS/OrderJS.js"></script>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>Tasty</title>
 </head>
 
 <body id="outerBody" onload="checkSessionValid()">
-    <div class="bgimg_5 bgimg">
-        <div class="caption">
-            <span class="border">Order</span>
-        </div>
+    <div id="topSidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="OrderPage.html">Home</a>
+        <a href="AboutPage.html">About</a>
     </div>
 
-    <div class="container" style="width:80%;margin:0 auto;">
-        <ul class="tab" style="display:table;margin:auto">
-            <li><a class="tablinks active" onclick="openTab(event, 'searchDiv')">Search</a></li>
-            <li><a class="tablinks" onclick="openTab(event, 'mapDiv')">Map</a></li>
-            <li><a class="tablinks" onclick="openTab(event, 'recentlyUseDiv')">Recently Use</a></li>
-        </ul>
-
-        <div id="searchDiv" class="tabcontent" style="width:50%;margin:auto;display:block;">
-            <h3 style="text-align:center">Search stores by key words</h3>
-            <input type="text" id="search_input" class="search_input" name="search" placeholder="Enter the key words and press Enter to search stores" onkeypress="onKeyPress()">
-            <div id="searchSection"></div>
-        </div>
-
-        <div id="mapDiv" class="tabcontent">
-            <h3 style="text-align:center">Find stores in the Map</h3>
-            <div id="map" style="margin:auto;width:60%;height:500px"></div>
-        </div>
-
-        <div id="recentlyUseDiv" class="tabcontent" style="width:50%;margin:auto;">
-            <h3 style="text-align:center">Those stores you use recently</h3>
-            <div id="recentlyUseSection"></div>
-        </div>
-
-        <div style="text-align:right;margin:25px auto;width:50%;">
-            <span style="width:auto;">or <a href="../HTML/NewStorePage.html">Create New Store</a></span>
-        </div>
-    </div>
-
-    <div class="bgimg_6 bgimg">
-        <div class="caption">
-            <span class="border" style="background-color:transparent;color:#171717;">Orders</span>
-        </div>
-    </div>
-
-    <div id="ongoingSection" class="ongoingDiv">
-        <h3 style="text-align:center">Your Orders</h3>
-        <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
-        <!--<button class="accordion">謝謝達叔的派克雞排</button>
-        <div class="panel">
-             <table>
-                 <tr>
-                     <td class="ongoingTable">五年就職典禮 - 2016/08/01</td>
-                     <td class="ongoingTable">
-                         <button class="input" style="width:100%;float:right;font-size:14px">Statistic</button>
-                     </td>
-                 </tr>
-             </table>
-         </div>
-         <div class="panel">
-             <span style="vertical-align:middle;background-color:red;">五年就職典禮 - 2016/08/01</span>
-             <button class="input" type="button" style="width:20%;float:right">Statistic</button>
-         </div>-->
-    </div>
-
-    <form id="modalForm" class="modal" action="StorePage.html" method="get">
-        <div class="modal-content">
-            <div style="background-color:#90EE90">
-                <p id="modalTitle" style="font-size:25px;text-align:center;color:#888888;padding:20px 0 0 0"></p>
-                <p id="modalAddress" style="font-size:20px;text-align:center;color:#888888;padding:0 0 20px 0"></p>
-            </div>
-            <table id="productTable"></table>
-            <div>
-                <button type="submit" id="confirmBtn" name="StoreID" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
-                <button type="button" style="background-color:#FFA07A;width:45%;float:right;font-size:16px" onclick="onMenuCancelClick()">Cancel</button>
+    <div id="main">
+        <div class="bgimg_5 bgimg">
+            <span class="topNavMenu" onclick="openNav()"> Menu</span>
+            <div class="caption">
+                <span class="border">Order</span>              
             </div>
         </div>
-    </form>
 
+        <div class="container" style="width:80%;margin:0 auto;">
+            <ul class="tab" style="display:table;margin:auto">
+                <li style="width:150px"><a class="tablinks active" style="width:100%;text-align:center;padding:10px 0;" onclick="openTab(event, 'searchDiv')">Search</a></li>
+                <li style="width:150px"><a class="tablinks" style="width:100%;text-align:center;padding:10px 0;" onclick="openTab(event, 'mapDiv')">Map</a></li>
+                <li style="width:150px"><a class="tablinks" style="width:100%;text-align:center;padding:10px 0;" onclick="openTab(event, 'recentlyUseDiv')">Recently</a></li>
+            </ul>
+
+            <div id="searchDiv" class="tabcontent" style="width:50%;margin:auto;display:block;">
+                <h3 style="text-align:center">Search stores by key words</h3>
+                <input type="text" id="search_input" class="search_input" name="search" placeholder="Enter the key words and press Enter to search stores" onkeypress="onKeyPress()">
+                <div id="searchSection"></div>
+            </div>
+
+            <div id="mapDiv" class="tabcontent">
+                <h3 style="text-align:center">Find stores in the Map</h3>
+                <div id="map" style="margin:auto;width:60%;height:500px"></div>
+            </div>
+
+            <div id="recentlyUseDiv" class="tabcontent" style="width:50%;margin:auto;">
+                <h3 style="text-align:center">Those stores you use recently</h3>
+                <div id="recentlyUseSection"></div>
+            </div>
+
+            <div style="text-align:right;margin:25px auto;width:50%;">
+                <span style="width:auto;">or <a href="../HTML/NewStorePage.html">Create New Store</a></span>
+            </div>
+        </div>
+
+        <div class="bgimg_6 bgimg">
+            <div class="caption">
+                <span class="border" style="background-color:transparent;color:#171717;">Orders</span>
+            </div>
+        </div>
+
+        <div id="ongoingSection" class="ongoingDiv">
+            <h3 style="text-align:center">Your Orders</h3>
+            <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
+            <!--<button class="accordion">謝謝達叔的派克雞排</button>
+            <div class="panel">
+                 <table>
+                     <tr>
+                         <td class="ongoingTable">五年就職典禮 - 2016/08/01</td>
+                         <td class="ongoingTable">
+                             <button class="input" style="width:100%;float:right;font-size:14px">Statistic</button>
+                         </td>
+                     </tr>
+                 </table>
+             </div>
+             <div class="panel">
+                 <span style="vertical-align:middle;background-color:red;">五年就職典禮 - 2016/08/01</span>
+                 <button class="input" type="button" style="width:20%;float:right">Statistic</button>
+             </div>-->
+        </div>
+
+        <form id="modalForm" class="modal" action="StorePage.html" method="get">
+            <div class="modal-content">
+                <div style="background-color:#90EE90">
+                    <p id="modalTitle" style="font-size:25px;text-align:center;color:#888888;padding:20px 0 0 0"></p>
+                    <p id="modalAddress" style="font-size:20px;text-align:center;color:#888888;padding:0 0 20px 0"></p>
+                </div>
+                <table id="productTable"></table>
+                <div>
+                    <button type="submit" id="confirmBtn" name="StoreID" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
+                    <button type="button" style="background-color:#FFA07A;width:45%;float:right;font-size:16px" onclick="onMenuCancelClick()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

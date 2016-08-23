@@ -92,19 +92,21 @@ function isDateValid(inputDate) {
     return isValid;
 }
 
-function isExpired(inputString) {
-    var inputDate = new Date(inputString);
-    var now = new Date();
-    if (inputDate < now)
-        return true;
-    return false;
-}
-
 function clearChild(elementName) {
     var div = document.getElementById(elementName);
     while (div.firstChild) {
         div.removeChild(div.firstChild);
     }
+}
+
+function openNav() {
+    $("#topSidenav").css("width", "250px");
+    $("#main").css("marginLeft", "250px");
+}
+
+function closeNav() {
+    $("#topSidenav").css("width", "0");
+    $("#main").css("marginLeft", "0");
 }
 
 function querySessionValid(onSessionValidSuccess) {
