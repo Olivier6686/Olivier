@@ -14,66 +14,74 @@
 </head>
 
 <body onload="checkSessionValid()">
-    <div class="bgimg_7 bgimg">
-        <div class="caption">
-            <span class="border">Store</span>
+    <div id="topSidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="OrderPage.html">Home</a>
+        <a href="AboutPage.html">About</a>
+    </div>
+
+    <div id="main">
+        <div class="bgimg_7 bgimg">
+            <span class="topNavMenu" onclick="openNav()"> Menu</span>
+            <div class="caption">
+                <span class="border">Store</span>
+            </div>
+        </div>
+
+        <div class="descriptionDiv">
+            <table id="informationTable"></table>
+        </div>
+
+        <div id="map" style="margin:0 auto 50px auto; width:60%;height:500px"></div>
+
+        <div class="bgimg_8 bgimg">
+            <div class="caption">
+                <span class="border" style="background-color:transparent;color:#171717;">Menu</span>
+            </div>
+        </div>
+
+        <div class="container descriptionDiv">
+            <table style="width:40%">
+                <tr>
+                    <td>Title</td>
+                    <td><input type="text" id="titleInput" name="title" style="width:70%;" /></td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td><input type="text" id="desInput" name="description" style="width:70%;" /></td>
+                </tr>
+                <tr>
+                    <td>Expired Time</td>
+                    <td><input id="expiredTimeInput" type="datetime-local" name="expiredTime" style="width:70%;" /></td>
+                </tr>
+            </table>
+            <br>
+
+            <table id="productTable"></table>
+
+            <div class="descriptionDiv" style="width:40%;margin:0 auto;">
+                <h3 id="warningMsg" style="margin:0 auto 20px auto;text-align:center;color:#f7786b"></h3>
+                <button type="button" name="storeID" onclick="onConfirmClick()" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
+                <button type="button" style="background-color:#FFA07A;width:45%;float:right;font-size:16px" onclick="onCancelClick()">Cancel</button>
+            </div>
+        </div>
+
+        <div id="modalDiv" class="modal" style="padding-top:250px;">
+            <div class="modal-content" style="height:auto;overflow:auto;">
+                <p style="font-size:25px;text-align:center;color:#888888;background-color:#90EE90;padding:20px">Your order have been established!</p>
+                <p style="font-size:20px;text-align:center;color:#888888;">
+                    Now, you can click "Home" button to the home page, and see the
+                    order in the ongoing section.
+                </p>
+                <p style="font-size:20px;text-align:center;color:#888888;">
+                    Click the ongoing order, and it will show a "Statistic" button, then click it! you can see the order status.
+                </p>
+                <p style="font-size:20px;text-align:center;color:#888888;">
+                    Click the "Order Now" button, you can order the foods and drinks now!
+                </p>
+                <button type="button" onclick="onHomeClick()" style="background-color:#90EE90;width:40%;font-size:16px;margin:auto;display:block;">Home</button>
+            </div>
         </div>
     </div>
-
-    <div class="descriptionDiv">
-        <table id="informationTable"></table>
-    </div>
-
-    <div id="map" style="margin:0 auto 50px auto; width:60%;height:500px"></div>
-
-    <div class="bgimg_8 bgimg">
-        <div class="caption">
-            <span class="border" style="background-color:transparent;color:#171717;">Menu</span>
-        </div>
-    </div>
-
-    <div class="container descriptionDiv">
-        <table style="width:40%">
-            <tr>
-                <td>Title</td>
-                <td><input type="text" id="titleInput" name="title" style="width:70%;" /></td>
-            </tr>
-            <tr>
-                <td>Description</td>
-                <td><input type="text" id="desInput" name="description" style="width:70%;" /></td>
-            </tr>
-            <tr>
-                <td>Expired Time</td>
-                <td><input id="expiredTimeInput" type="datetime-local" name="expiredTime" style="width:70%;" /></td>
-            </tr>
-        </table>
-        <br>
-
-        <table id="productTable"></table>
-
-        <div class="descriptionDiv" style="width:40%;margin:0 auto;">
-            <h3 id="warningMsg" style="margin:0 auto 20px auto;text-align:center;color:#f7786b"></h3>
-            <button type="button" name="storeID" onclick="onConfirmClick()" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
-            <button type="button" style="background-color:#FFA07A;width:45%;float:right;font-size:16px" onclick="onCancelClick()">Cancel</button>
-        </div>
-    </div>
-
-    <div id="modalDiv" class="modal" style="padding-top:250px;">
-        <div class="modal-content" style="height:auto;overflow:auto;">
-            <p style="font-size:25px;text-align:center;color:#888888;background-color:#90EE90;padding:20px">Your order have been established!</p>
-            <p style="font-size:20px;text-align:center;color:#888888;">
-                Now, you can click "Home" button to the home page, and see the
-                order in the ongoing section.
-            </p>
-            <p style="font-size:20px;text-align:center;color:#888888;">
-                Click the ongoing order, and it will show a "Statistic" button, then click it! you can see the order status.
-            </p>
-            <p style="font-size:20px;text-align:center;color:#888888;">
-                Click the "Order Now" button, you can order the foods and drinks now!
-            </p>
-            <button type="button" onclick="onHomeClick()" style="background-color:#90EE90;width:40%;font-size:16px;margin:auto;display:block;">Home</button>
-        </div>
-    </div>
-
 </body>
 </html>

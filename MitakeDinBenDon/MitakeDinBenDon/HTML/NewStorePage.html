@@ -14,81 +14,89 @@
 </head>
 
 <body onload="checkSessionValid()">
-    <div class="bgimg_11 bgimg">
-        <div class="caption">
-            <span class="border">Create New Store</span>
-        </div>
+    <div id="topSidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="OrderPage.html">Home</a>
+        <a href="AboutPage.html">About</a>
     </div>
 
-    <div class="descriptionDiv">
-        <table id="informationTable">
-            <tr>
-                <td>Store Name<span style="color:red">*</span></td>
-                <td>
-                    <input id="storeName_input" type="text" placeholder="Please enter store name" style="width:70%;" />
-                </td>
-            </tr>
-            <tr>
-                <td>Address<span style="color:red">*</span></td>
-                <td>
-                    <input id="address_input" type="text" placeholder="Please enter address" style="width:70%;" />
-                </td>
-            </tr>
-            <tr>
-                <td>Phone<span style="color:red">*</span></td>
-                <td>
-                    <input id="phone_input" type="text" placeholder="Please enter phone" style="width:70%;" />
-                </td>
-            </tr>
-            <tr>
-                <td>Fax</td>
-                <td>
-                    <input id="fax_input" type="text" placeholder="Please enter Fax" style="width:70%;" />
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="bgimg_12 bgimg">
-        <div class="caption">
-            <span class="border" style="background-color:transparent;color:#171717;">Create New Menu</span>
-        </div>
-    </div>
-
-    <div class="descriptionDiv" style="width:70%;margin:0 auto">
-        <table>
-            <tr>
-                <td>Name<span style="color:red">*</span></td>
-                <td>Item<span style="color:red">*</span></td>
-                <td>Category<span style="color:red">*</span></td>
-            </tr>
-            <tr>
-                <td>
-                    <input id="name_input" type="text" class="input" placeholder="Please enter name" style="width:80%;" />
-                </td>
-                <td>
-                    <input id="item_input" type="text" class="input" placeholder="Ex:50 or M:30 or M:30,L:50" style="width:80%;" />
-                </td>
-                <td>
-                    <div>
-                        <input id="category_input" type="text" class="input" placeholder="Please enter name" style="width:80%;" />
-                        <button class="baseButton addButton" onclick="onAddClick()"></button>
-                    </div>
-                </td>
-            </tr>
-        </table>
-
-        <h3 id="warningMsg" style="margin:20px auto;text-align:center;color:#f7786b"></h3>
-
-        <h2 style="text-align:center;margin:25px auto">Menu Overview</h2>
-
-        <table id="overviewTable"></table>
-
-        <div class="container" style="width:30%;margin:0 auto">
-            <button type="button" onclick="onConfirmClick()" style="background-color:#90EE90;">Confirm</button>
-            <button type="button" style="background-color:#FFA07A;float:right;" onclick="onCancelClick()">Cancel</button>
+    <div id="main">
+        <div class="bgimg_11 bgimg">
+            <span class="topNavMenu" onclick="openNav()"> Menu</span>
+            <div class="caption">
+                <span class="border">Create New Store</span>
+            </div>
         </div>
 
+        <div class="descriptionDiv">
+            <table id="informationTable">
+                <tr>
+                    <td>Store Name<span style="color:red">*</span></td>
+                    <td>
+                        <input id="storeName_input" type="text" placeholder="Please enter store name" style="width:70%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Address<span style="color:red">*</span></td>
+                    <td>
+                        <input id="address_input" type="text" placeholder="Please enter address" style="width:70%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Phone<span style="color:red">*</span></td>
+                    <td>
+                        <input id="phone_input" type="text" placeholder="Please enter phone" style="width:70%;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fax</td>
+                    <td>
+                        <input id="fax_input" type="text" placeholder="Please enter Fax" style="width:70%;" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="bgimg_12 bgimg">
+            <div class="caption">
+                <span class="border" style="background-color:transparent;color:#171717;">Create New Menu</span>
+            </div>
+        </div>
+
+        <div class="descriptionDiv" style="width:70%;margin:0 auto">
+            <table>
+                <tr>
+                    <td>Name<span style="color:red">*</span></td>
+                    <td>Item<span style="color:red">*</span></td>
+                    <td>Category<span style="color:red">*</span></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="name_input" type="text" class="input" placeholder="Please enter name" style="width:80%;" />
+                    </td>
+                    <td>
+                        <input id="item_input" type="text" class="input" placeholder="Ex:50 or M:30 or M:30,L:50" style="width:80%;" />
+                    </td>
+                    <td>
+                        <div>
+                            <input id="category_input" type="text" class="input" placeholder="Please enter name" style="width:80%;" />
+                            <button class="baseButton addButton" onclick="onAddClick()"></button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h3 id="warningMsg" style="margin:20px auto;text-align:center;color:#f7786b"></h3>
+
+            <h2 style="text-align:center;margin:25px auto">Menu Overview</h2>
+
+            <table id="overviewTable"></table>
+
+            <div class="container" style="width:30%;margin:0 auto">
+                <button type="button" onclick="onConfirmClick()" style="background-color:#90EE90;">Confirm</button>
+                <button type="button" style="background-color:#FFA07A;float:right;" onclick="onCancelClick()">Cancel</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>

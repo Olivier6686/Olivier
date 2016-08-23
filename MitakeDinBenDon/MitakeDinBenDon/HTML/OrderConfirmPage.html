@@ -15,53 +15,62 @@
 </head>
 
 <body onload="checkSessionValid()">
-    <div class="bgimg_9 bgimg">
-        <div class="caption">
-            <span id="titleSpan" class="border"></span>
-        </div>
+    <div id="topSidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="OrderPage.html">Home</a>
+        <a href="AboutPage.html">About</a>
     </div>
 
-    <div class="descriptionDiv">
-        <table id="informationTable"></table>
-    </div>
-
-    <div class="bgimg_10 bgimg">
-        <div class="caption">
-            <span class="border" style="background-color:transparent;color:#171717;">Statistics</span>
-        </div>
-    </div>
-
-    <div class="descriptionDiv">
-        <table style="width:40%">
-            <tr>
-                <td>Description</td>
-                <td><span id="descriptionSpan" style="width:70%;" /></td>
-            </tr>
-            <tr>
-                <td>Expired Time</td>
-                <td><span id="expiredTimeSpan" style="width:70%;" /></td>
-            </tr>
-        </table>
-        <br>
-
-        <table id="productTable"></table>
-
-        <p id="totalPrice" style="font-size:28px;margin:20px auto">Total: </p>
-
-        <div id="emptyDiv" class="descriptionDiv container" style="width:40%;margin:0 auto;">
-            <h3 id="emptyMsg" style="margin:0 auto;text-align:center;color:#f7786b">You have no order now, you can click the button to order!</h3>
-            <div style="margin-top:20px">
-                <button id="orderBtn" onclick="onOrderClick()" style="background-color:#90EE90;width:45%;font-size:16px">Order Now</button>
-                <a id="exportLink" class="LinkButton" href="#" onclick="onExportClick()">Export to Excel</a>
+    <div id="main">
+        <div class="bgimg_9 bgimg">
+            <span class="topNavMenu" onclick="openNav()"> Menu</span>
+            <div class="caption">
+                <span id="titleSpan" class="border"></span>
             </div>
         </div>
 
-        <div id="attendanceDiv" class="descriptionDiv" style="width:40%;margin:0 auto;display:none">
-            <div class="container">
-                <span><b>Attendance</b></span>
-                <input class="input" id="attendanceName" type="text" placeholder="Enter Attendance Name" />
-                <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
-                <button onclick="onConfirmClick()" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
+        <div class="descriptionDiv">
+            <table id="informationTable"></table>
+        </div>
+
+        <div class="bgimg_10 bgimg">
+            <div class="caption">
+                <span class="border" style="background-color:transparent;color:#171717;">Statistics</span>
+            </div>
+        </div>
+
+        <div class="descriptionDiv">
+            <table style="width:40%">
+                <tr>
+                    <td>Description</td>
+                    <td><span id="descriptionSpan" style="width:70%;" /></td>
+                </tr>
+                <tr>
+                    <td>Expired Time</td>
+                    <td><span id="expiredTimeSpan" style="width:70%;" /></td>
+                </tr>
+            </table>
+            <br>
+
+            <table id="productTable"></table>
+
+            <p id="totalPrice" style="font-size:28px;margin:20px auto">Total: </p>
+
+            <div id="emptyDiv" class="descriptionDiv container" style="width:40%;margin:0 auto;">
+                <h3 id="emptyMsg" style="margin:0 auto;text-align:center;color:#f7786b">You have no order now, you can click the button to order!</h3>
+                <div style="margin-top:20px">
+                    <button id="orderBtn" onclick="onOrderClick()" style="background-color:#90EE90;width:45%;font-size:16px">Order Now</button>
+                    <a id="exportLink" class="LinkButton" href="#" onclick="onExportClick()">Export to Excel</a>
+                </div>
+            </div>
+
+            <div id="attendanceDiv" class="descriptionDiv" style="width:40%;margin:0 auto;display:none">
+                <div class="container">
+                    <span><b>Attendance</b></span>
+                    <input class="input" id="attendanceName" type="text" placeholder="Enter Attendance Name" />
+                    <h3 id="warningMsg" style="margin:0 auto;text-align:center;color:#f7786b"></h3>
+                    <button onclick="onConfirmClick()" style="background-color:#90EE90;width:45%;font-size:16px">Confirm</button>
+                </div>
             </div>
         </div>
     </div>
