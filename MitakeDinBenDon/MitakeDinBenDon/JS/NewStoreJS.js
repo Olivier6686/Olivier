@@ -161,22 +161,16 @@ function onCancelClick() {
 function onCreateMenuSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
+        createStore("221");
 
-        var name = $("#storeName_input").val();
-        var address = $("#address_input").val();
-        var phone = $("#phone_input").val();
-        var fax = $("#fax_input").val();
+        //如果需要加入postal code則需要使用下面程式碼
+        //var action = {
+        //    address: $("#address_input").val(),
+        //    success: (postalCode) => { createStore(postalCode); },
+        //    error: (postalCode) => { createStore(postalCode); }
+        //}
 
-        var api = ServerURL + "/CreateStore";
-        var parameter = {
-            param: { StoreName: name, Address: address, Phone: phone, Fax: fax, MenuID: args.MenuID },
-            type: "POST",
-            success: (args) => { onCreateStoreSuccess(args) },
-            error: (args) => { onCreateStoreError(args) }
-        }
-
-        query(api, parameter);
-
+        //decodeAddress(action);
     }
     else {
         setWarningMsg(true, "User name or Password failed");
@@ -185,6 +179,23 @@ function onCreateMenuSuccess(args) {
 
 function onCreateMenuError(args) {
     setWarningMsg(true, "Some errors occur");
+}
+
+function createStore(postalCode) {
+    var name = $("#storeName_input").val();
+    var address = $("#address_input").val();
+    var phone = $("#phone_input").val();
+    var fax = $("#fax_input").val();
+
+    var api = ServerURL + "/CreateStore";
+    var parameter = {
+        param: { StoreName: name, Address: address, Phone: phone, Fax: fax, MenuID: args.MenuID },
+        type: "POST",
+        success: (args) => { onCreateStoreSuccess(args) },
+        error: (args) => { onCreateStoreError(args) }
+    }
+
+    query(api, parameter);
 }
 
 function onCreateStoreSuccess(args) {
@@ -225,3 +236,31 @@ function validateItem(price) {
 
     return true;
 }
+
+function decodeAddress(action) {
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ "address": action.address }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var postalCode = getPostalCode(results[0]);
+            if (typeof action.success === 'function') {
+                action.success(postalCode);
+            }
+        }
+        else {
+            if (typeof action.error === 'function') {
+                action.error(undefined);
+            }
+        }
+    });
+}
+
+function getPostalCode(locationObject) {
+    var postalCode = undefined;
+    for (var i = 0; i < locationObject.address_components.length; i++) {
+        if (locationObject.address_components[i].types[0] == "postal_code") {
+            postalCode = locationObject.address_components[i].long_name;
+        }
+    }
+    return postalCode;
+}
+

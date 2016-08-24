@@ -206,7 +206,7 @@ function createStoreInfoTable(store) {
     clearChild("informationTable");
     var table = document.getElementById("informationTable");
     for (var propertyName in store) {
-        if (propertyName == "StoreID" || propertyName == "MenuID")
+        if (propertyName == "StoreID" || propertyName == "MenuID" || propertyName == "PostalCode")
             continue;
         var num = table.rows.length;
         var tr = table.insertRow(num);

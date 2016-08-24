@@ -263,7 +263,7 @@ function initailMap() {
 
 function setCenterMap(LatLng) {
     var mapCanvas = document.getElementById("map");
-    var mapOptions = { center: LatLng, zoom: 14 }
+    var mapOptions = { center: LatLng, zoom: 14, mapTypeId: google.maps.MapTypeId.ROADMAP }
     MapDiv = new google.maps.Map(mapCanvas, mapOptions);
     getStores();
 }
