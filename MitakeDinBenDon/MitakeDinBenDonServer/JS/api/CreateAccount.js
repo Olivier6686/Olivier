@@ -27,7 +27,7 @@ function AddAccount(data)
     var query = 'INSERT INTO Account(UserName, RealName, Password, OrderList, Email) VALUES(@username, @realname, @password, @orderlist, @email);';
 
     sqlRequest.query(query).then(function (recordset) {
-        common.sendSucceed(response);
+        common.sendSucceed(response, undefined);
     }).catch(function (err) {
         console.dir(err);
         common.ReturnError(err, response);

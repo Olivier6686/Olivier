@@ -7,7 +7,7 @@ function login(data)
     var request     = data.request;
     var  response = data.response;
     var  querys    = data.query;
-    var args = querystring.parse(querys);    
+    var args = querystring.parse(querys);
     /*
     if (request.method === "GET") {
         response.writeHead(404, { "Content-Type": "text/plain" });
