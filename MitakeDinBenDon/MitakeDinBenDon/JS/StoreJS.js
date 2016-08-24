@@ -136,6 +136,10 @@ function onCreateError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
+function onHomeClick() {
+    window.location.assign("OrderPage.html");
+}
+
 function updateOrderList(GUID) {
     var guid = { OrderFormID: GUID };
     var orderList = getSessionStorage("OrderList");
