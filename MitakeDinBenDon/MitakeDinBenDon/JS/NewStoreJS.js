@@ -161,7 +161,7 @@ function onCancelClick() {
 function onCreateMenuSuccess(args) {
     if (args.IsSucceed) {
         setWarningMsg(false, "");
-        createStore("221");
+        createStore("221", args.MenuID);
 
         //如果需要加入postal code則需要使用下面程式碼
         //var action = {
@@ -181,7 +181,7 @@ function onCreateMenuError(args) {
     setWarningMsg(true, "Some errors occur");
 }
 
-function createStore(postalCode) {
+function createStore(postalCode, menuID) {
     var name = $("#storeName_input").val();
     var address = $("#address_input").val();
     var phone = $("#phone_input").val();
@@ -189,7 +189,7 @@ function createStore(postalCode) {
 
     var api = ServerURL + "/CreateStore";
     var parameter = {
-        param: { StoreName: name, Address: address, Phone: phone, Fax: fax, MenuID: args.MenuID },
+        param: { StoreName: name, Address: address, Phone: phone, Fax: fax, MenuID: menuID },
         type: "POST",
         success: (args) => { onCreateStoreSuccess(args) },
         error: (args) => { onCreateStoreError(args) }
