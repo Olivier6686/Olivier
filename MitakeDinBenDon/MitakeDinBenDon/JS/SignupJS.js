@@ -32,7 +32,7 @@ function onCreateAccountSuccess(args) {
         setWarningMsg(false, "");
         setSessionStorage("UserName", $("#username").val());
         setSessionStorage("OrderList", "[]");
-        window.location.assign("/index.html");
+        window.location.assign("/main/index.html");
     }
     else {
         setWarningMsg(true, "User name or Password failed");
