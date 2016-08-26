@@ -19,24 +19,24 @@ function onAddClick() {
     var name = $("#name_input").val();
     if (isStringEmpty(name)) {
         setWarningMsg(true, "Name is must to fill");
-        true;
+        return;
     }
 
     var price = $("#item_input").val();
     if (isStringEmpty(price)) {
         setWarningMsg(true, "Item is must to fill");
-        true;
+        return;
     }
 
     var category = $("#category_input").val();
     if (isStringEmpty(category)) {
         setWarningMsg(true, "Category is must to fill");
-        true;
+        return;
     }
 
     if (!validateItem(price)) {
         setWarningMsg(true, "Item format incorrect");
-        true;
+        return;
     }
 
     var id = getNextItemID();
@@ -200,7 +200,10 @@ function createStore(postalCode, menuID) {
 
 function onCreateStoreSuccess(args) {
     if (args.IsSucceed) {
-
+        alert("Create store Success!");
+    }
+    else {
+        setWarningMsg(true, "Create store Fail!");
     }
 }
 

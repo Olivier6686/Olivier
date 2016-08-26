@@ -8,6 +8,7 @@
     <link rel="icon" href="../Images/icon.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="../JS/jquery.tablesorter.min.js"></script>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
     <script src="../JS/OrderConfirmJS.js"></script>
     <script src="../JS/Common.js"></script>
     <meta charset="utf-8" />
@@ -18,7 +19,10 @@
     <div id="topSidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="OrderPage.html">Home</a>
+        <!--<a href="http://10.1.4.150:9001">2048</a>
+        <a href="http://10.1.4.174:3000">Weather</a>-->
         <a href="AboutPage.html">About</a>
+        <a href="javascript:void(0)" onclick="onLogoutClick()">Logout</a>
     </div>
 
     <div id="main">
@@ -29,9 +33,24 @@
             </div>
         </div>
 
-        <div class="descriptionDiv">
-            <table id="informationTable"></table>
+        <!--此方塊為使用CommonTemplateJS並且使用component-->
+        <div id="storeinfotableDiv" class="descriptionDiv">
+            <storeinfotable v-bind:source="storeitem"></storeinfotable>
         </div>
+
+        <script type="text/x-template" id="storeinfotemplate">
+            <table>
+                <tr v-for="(key, val) in source">
+                    <td>{{key}}</td>
+                    <td>{{val}}</td>
+                </tr>
+            </table>
+        </script>
+        <script src="../JS/CommonTemplateJS.js"></script>
+
+        <!--<div class="descriptionDiv">
+            <table id="informationTable"></table>
+        </div>-->
 
         <div class="bgimg_10 bgimg">
             <div class="caption">

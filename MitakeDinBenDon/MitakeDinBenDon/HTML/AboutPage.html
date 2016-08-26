@@ -4,17 +4,22 @@
     <link rel="stylesheet" href="../CSS/CommonStyle.css">
     <link rel="stylesheet" href="../CSS/AboutStyle.css">
     <link rel="icon" href="../Images/icon.png">
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="../JS/Common.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <meta charset="utf-8" />
 </head>
+
 <body>
     <div id="topSidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="OrderPage.html">Home</a>
-        <a href="#">About</a>
+        <!--<a href="http://10.1.4.150:9001">2048</a>
+        <a href="http://10.1.4.174:3000">Weather</a>-->
+        <a href="AboutPage.html">About</a>
+        <a href="javascript:void(0)" onclick="onLogoutClick()">Logout</a>
     </div>
 
     <div id="main">
@@ -37,8 +42,29 @@
             <span style="font-size:25px;margin:0 auto;">Organization</span>
         </div>
 
-
         <div class="line">
+            <div id="personalDiv" class="picDiv">
+                <personalcard name="Olivier Lin"
+                              title="CEOfefef"
+                              description="Responsible for server side architecture and API develop, migrate, maintenance.
+                              Also, design database table schema and project management"
+                              mail="Olivier.Lin@mitake.com.tw"
+                              img-path="../Images/Olivier.png"></personalcard>
+            </div>
+        </div>
+
+        <script type="text/x-template" id="personalcardtemplate">
+            <img src="../Images/Olivier.png" alt="{{ title }}" style="width:100%">
+            <div class="container">
+                <h4><b>{{ name }}</b></h4>
+                <p>{{ title }}</p>
+                <p>{{ description }}</p>
+                <p>Mail: {{ mail }}</p>
+            </div>
+        </script>
+        <script src="../JS/AboutPageJS.js"></script>
+
+        <!--<div class="line">
             <div class="picDiv">
                 <img src="..\Images/Olivier.png" alt="CEO" style="width:100%">
                 <div class="container">
@@ -60,7 +86,63 @@
                     <p>Mail: Alvin.Wang@mitake.com.tw</p>
                 </div>
             </div>
+        </div>-->
+
+        <!--<div style="background-color:#ebcfc4;width:100%;text-align:center;padding:50px 0 0 0;">
+            <span style="font-size:25px;margin:0 auto;">Organization</span>
         </div>
+
+        <div class="line" style="background-color:#ebcfc4">
+            <div class="picDiv">
+                <img src="..\Images/Edar.png" alt="CEO" style="width:100%">
+                <div class="container">
+                    <h4><b>Olivier Lin</b></h4>
+                    <p>CEO</p>
+                    <p>Responsible for server side architecture and API develop, migrate, maintenance.</p>
+                    <p>Also, design database table schema and project management</p>
+                    <p>Mail: Olivier.Lin@mitake.com.tw</p>
+                </div>
+            </div>
+
+            <div class="picDiv" style="margin-left:50px;">
+                <img src="..\Images/Jim.png" alt="CAO" style="width:100%">
+                <div class="container">
+                    <h4><b>Alvin Wang</b></h4>
+                    <p>CAO</p>
+                    <p>Responsible for front-end architecture and User Interface design for user friend experince.</p>
+                    <p>Also, design database table schema and project management</p>
+                    <p>Mail: Alvin.Wang@mitake.com.tw</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background-color:#f4f4f5;width:100%;text-align:center;padding:50px 0 0 0;">
+            <span style="font-size:25px;margin:0 auto;">Organization</span>
+        </div>
+
+        <div class="line">
+            <div class="picDiv">
+                <img src="..\Images/Morris.png" alt="CEO" style="width:100%">
+                <div class="container">
+                    <h4><b>Olivier Lin</b></h4>
+                    <p>CEO</p>
+                    <p>Responsible for server side architecture and API develop, migrate, maintenance.</p>
+                    <p>Also, design database table schema and project management</p>
+                    <p>Mail: Olivier.Lin@mitake.com.tw</p>
+                </div>
+            </div>
+
+            <div class="picDiv" style="margin-left:50px;">
+                <img src="..\Images/Eason.png" alt="CAO" style="width:100%">
+                <div class="container">
+                    <h4><b>Alvin Wang</b></h4>
+                    <p>CAO</p>
+                    <p>Responsible for front-end architecture and User Interface design for user friend experince.</p>
+                    <p>Also, design database table schema and project management</p>
+                    <p>Mail: Alvin.Wang@mitake.com.tw</p>
+                </div>
+            </div>
+        </div>-->
 
         <footer style="background-color:#999999;opacity:0.7;">
             <p style="text-align:center;color:white;padding:14px;">Powered by Mitake RD3</p>

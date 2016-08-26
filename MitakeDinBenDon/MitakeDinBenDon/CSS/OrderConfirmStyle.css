@@ -34,3 +34,13 @@ input.copyImage {
     font-size: 13px;
     color: #777777;
 }
+
+.upArrow::after {
+    content: '\023F6';
+    font-size: 20px;
+}
+
+.downArrow::after {
+    content: '\023F7';
+    font-size: 20px;
+}

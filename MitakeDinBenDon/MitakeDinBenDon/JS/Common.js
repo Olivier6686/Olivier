@@ -109,6 +109,25 @@ function closeNav() {
     $("#main").css("marginLeft", "0");
 }
 
+function onLogoutClick() {
+    var date = new Date();
+    var time = date.getTime();
+
+    var api = ServerURL + "/Logout";
+    var parameter = {
+        param: { timestamp: time },
+        type: "GET",
+        success: (args) => {
+            window.location.assign("../index.HTML");
+        },
+        error: (args) => {
+            alert("Some error occur");
+        }
+    }
+
+    query(api, parameter);
+}
+
 function querySessionValid(onSessionValidSuccess) {
     var date = new Date();
     var time = date.getTime();
@@ -203,20 +222,22 @@ function getStoreByID(id, onGetStoreByIDSuccess, onGetStoreByIDError) {
 }
 
 function createStoreInfoTable(store) {
-    clearChild("informationTable");
-    var table = document.getElementById("informationTable");
-    for (var propertyName in store) {
-        if (propertyName == "StoreID" || propertyName == "MenuID" || propertyName == "PostalCode")
-            continue;
-        var num = table.rows.length;
-        var tr = table.insertRow(num);
-        td = tr.insertCell(tr.cells.length);
-        td.innerHTML = propertyName;
-        td = tr.insertCell(tr.cells.length);
-        td.innerHTML = store[propertyName];
-    }
+    vm.filterStoreInfo(store);
 
-    return store;
+    //clearChild("informationTable");
+    //var table = document.getElementById("informationTable");
+    //for (var propertyName in store) {
+    //    if (propertyName == "StoreID" || propertyName == "MenuID" || propertyName == "PostalCode")
+    //        continue;
+    //    var num = table.rows.length;
+    //    var tr = table.insertRow(num);
+    //    td = tr.insertCell(tr.cells.length);
+    //    td.innerHTML = propertyName;
+    //    td = tr.insertCell(tr.cells.length);
+    //    td.innerHTML = store[propertyName];
+    //}
+
+    //return store;
 }
 
 function query(url, o) {
