@@ -6,7 +6,7 @@
         mail: String,
         imgpath: {
             type: String,
-            default: "../Images/Jim.png"
+            default: "/main/Images/Jim.png"
         }
     },
     template: "#personalcardtemplate",
