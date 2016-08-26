@@ -1,13 +1,24 @@
 ﻿var PersonalCard = Vue.extend({
-    props: ["name", "title", "description", "mail"],
+    props: {
+        name: String,
+        title: String, 
+        description: String,
+        mail: String,
+        imgpath: {
+            type: String,
+            default: "../Images/Jim.png"
+        }
+    },
     template: "#personalcardtemplate",
     replace: true
 })
 
-// 注册
 Vue.component("personalcard", PersonalCard)
 
-// 创建根实例
 new Vue({
     el: '#personalDiv'
+})
+
+new Vue({
+    el: '#personalDiv2'
 })
