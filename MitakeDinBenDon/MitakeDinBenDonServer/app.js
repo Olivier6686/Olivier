@@ -8,7 +8,7 @@ var session = require('express-session');
 //var router = express.Router()
 var app = express();
 var pathname = __dirname;
-var port = 8888;
+var port = 8889;
 var redirect = 'http://10.1.4.133:' + port + '/Main/index.html';
 //var redirect2 = 'http://www.google.com';
 
@@ -27,6 +27,7 @@ handle["/CreateStore"] = requestHandlers.CreateStore;
 handle["/CreateMenu"] = requestHandlers.CreateMenu;
 handle["/SessionCheck"] = requestHandlers.SessionCheck;
 handle["/GetRecentlyUseStores"] = requestHandlers.GetRecentlyUseStores;
+handle["/Logout"] = requestHandlers.Loginout;
 
 
 app.use('/Main', express.static(pathname.replace('MitakeDinBenDonServer', 'MitakeDinBenDon')));
@@ -157,6 +158,11 @@ app.post('/SessionCheck', function (req, res) {
 app.get('/GetRecentlyUseStores', function (req, res) {
     var data = req.data;
     handle["/GetRecentlyUseStores"](data);
+});
+
+app.get('/Logout', function (req, res) {
+    var data = req.data;
+    handle["/Logout"](data);
 });
 
 //app.use(router);

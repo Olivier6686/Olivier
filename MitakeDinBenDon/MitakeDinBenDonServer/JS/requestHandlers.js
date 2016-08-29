@@ -12,6 +12,7 @@ var createStore = require('./api/CreateStore.js');
 var createMenu = require('./api/CreateMenu.js');
 var sessionCheck = require('./api/SessionCheck.js');
 var getRecentlyUseStores = require('./api/GetRecentlyUseStores.js');
+var loginout = require('./api/Logout.js');
 
 exports.Login = login.login;
 exports.GetStoresByName = getStoresByName.GetStoresByName;
@@ -27,3 +28,4 @@ exports.CreateStore = createStore.CreateStore;
 exports.CreateMenu = createMenu.CreateMenu;
 exports.SessionCheck = sessionCheck;
 exports.GetRecentlyUseStores = getRecentlyUseStores;
+exports.Loginout = loginout;

@@ -119,7 +119,7 @@ function updateAttendance(response, id, attendance) {
 
 function SendSucceed(response, ret)
 {
-    var defaultRet = { IsSucceed: true };
+    var defaultRet = { IsSucceed: true }; 
     if (ret === undefined)
         ret = defaultRet;
     else
@@ -130,7 +130,7 @@ function SendSucceed(response, ret)
     response.write(json);
     response.end();
 }
-
+ 
 exports.ReturnError = ReturnError;
 exports.ErrorMap = ErrorMap;
 

@@ -43,6 +43,7 @@
     <Compile Include="JS\api\GetStores.js" />
     <Compile Include="JS\api\GetStoresByName.js" />
     <Compile Include="JS\api\Login.js" />
+    <Compile Include="JS\api\Logout.js" />
     <Compile Include="JS\api\SessionCheck.js" />
     <Compile Include="JS\api\UpateOrderFormAttendance.js" />
     <Compile Include="app.js" />

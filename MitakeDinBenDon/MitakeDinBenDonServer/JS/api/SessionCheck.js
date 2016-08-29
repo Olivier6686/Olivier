@@ -1,11 +1,11 @@
 ﻿var common = require('../Common/common.js');
-//var session = require('express-session');
+
 
 function SessionCheck(data) {
     var req = data.request;
     var res = data.response;
     
-    /*
+    
     var sess = req.session;
     if (sess) {
         if (sess.data) {
@@ -14,8 +14,8 @@ function SessionCheck(data) {
         }
     }
     common.ReturnError(undefined, res);
-    */
-    common.sendSucceed(res, undefined);
+    
+    //common.sendSucceed(res, undefined);
 }
 
 module.exports = SessionCheck;
