@@ -35,12 +35,17 @@ input.copyImage {
     color: #777777;
 }
 
-.upArrow::after {
-    content: '\023F6';
-    font-size: 20px;
+table.tablesorter thead tr th.headerSortUp:after {
+  content: "\023F6";
+  font-size: 20px;
 }
 
-.downArrow::after {
-    content: '\023F7';
-    font-size: 20px;
+table.tablesorter thead tr th.headerSortDown:after {
+  content: "\023F7";
+  font-size: 20px;
+}
+
+table.tablesorter th.headerSortDown,
+table.tablesorter th.headerSortUp {
+    background-color: #eeeeee;
 }

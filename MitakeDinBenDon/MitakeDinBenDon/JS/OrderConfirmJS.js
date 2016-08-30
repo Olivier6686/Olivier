@@ -3,6 +3,7 @@ var StoreID;
 var Menu;
 
 function checkSessionValid() {
+    //Test();
     querySessionValid(onSessionValidSuccess);
 }
 
@@ -171,7 +172,6 @@ function onStatisticsTableSuccess(args) {
             var tr = header.insertRow(0);
             var th = document.createElement("th");
             th.innerHTML = "Name"
-            //th.onclick = onHeaderClick;
             tr.appendChild(th);
 
             var th = document.createElement("th");
@@ -243,11 +243,6 @@ function onStatisticsTableSuccess(args) {
 
 function onStatisticsTableError(args) {
     setWarningMsg(true, "Some errors occur");
-}
-
-function onHeaderClick(e) {
-    var th = e.currentTarget;
-    th.className = "upArrow";
 }
 
 function getOrderItemByName(attendanceName, itemID, detail) {
@@ -482,7 +477,8 @@ function jsonToSsXml(jsonObject) {
 };
 
 function download(content, filename, contentType) {
-    if (!contentType) contentType = 'application/octet-stream';
+    if (!contentType)
+        contentType = 'application/octet-stream';
     var a = document.getElementById('exportLink');
     var blob = new Blob([content], {
         'type': contentType
